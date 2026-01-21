@@ -55,6 +55,12 @@
             <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
                 <i class="fas fa-cog mr-3"></i> Settings
             </a>
+            <form method="Post" action="{{ route('admin.logout') }}">
+                @csrf
+                <button type="submit" class="w-full text-left flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
+                    <i class="fas fa-sign-out-alt mr-3 "></i> Logout
+                </button>
+            </form>
         </nav>
     </aside>
 
