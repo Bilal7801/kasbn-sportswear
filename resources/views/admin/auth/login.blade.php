@@ -120,7 +120,7 @@
         <div class="mt-8 pt-6 border-t border-dark-accent text-center">
             <p class="text-gray-500 text-sm">
                 Forgot your password?
-                <span class="text-blue-light">(Coming soon)</span>
+                <a href="{{ route('admin.forget.password') }}" class="text-blue-light">Forget Password</a>
             </p>
             <p class="text-gray-600 text-xs mt-3">
                 © {{ date('Y') }} Admin Portal

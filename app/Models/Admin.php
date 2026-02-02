@@ -8,11 +8,14 @@ use Illuminate\Notifications\Notifiable;
 class Admin extends Authenticatable
 {
     use Notifiable;
+    protected $table = 'admins';
 
     protected $fillable = [
         'name',
         'email',
         'password',
+        'otp',
+        'otp_expires_at',
     ];
 
     protected $hidden = [
