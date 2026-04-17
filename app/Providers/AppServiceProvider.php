@@ -1,24 +1,17 @@
 <?php
 
-namespace App\Providers;
+// app/Providers/AppServiceProvider.php
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Enquiry;
+use Illuminate\Support\Facades\View;
 
-class AppServiceProvider extends ServiceProvider
+class AppServiceProvider extends \Illuminate\Support\ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        // Share new enquiries count with all admin views
+        View::composer('admin.*', function ($view) {
+            $view->with('newInquiriesCount', Enquiry::where('status', 'new')->count());
+        });
     }
 }
