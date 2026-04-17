@@ -1,281 +1,241 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportswear Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('admin.layout')
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3b82f6',
-                        primaryHover: '#2563eb',
-                        secondary: '#10b981',
-                        lightGray: '#f8fafc',
-                        borderGray: '#e2e8f0',
-                        textGray: '#64748b'
-                    }
-                }
-            }
-        }
-    </script>
-</head>
+@section('page-title', 'Dashboard | SportFit Admin')
+@section('header-title', 'Sportswear Dashboard')
 
-<body class="bg-gray-50 text-gray-800 min-h-screen">
+@section('content')
+<div class="space-y-6">
 
-<!-- ===== Layout Wrapper ===== -->
-<div class="flex min-h-screen">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+        <p class="text-gray-600 mt-1">Monitor inquiries, customers, products, and track business performance.</p>
+    </div>
 
-    <!-- ===== Sidebar ===== -->
-    <aside class="w-64 bg-white border-r border-gray-200 hidden md:block">
-        <div class="p-6 text-xl font-bold text-gray-900 flex items-center">
-            <i class="fas fa-running text-primary mr-3"></i> SportFit Admin
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">📩 Total Inquiries</p>
+                    <h2 class="text-2xl font-bold mt-2 text-gray-900">{{ $totalInquiriesToday ?? 0 }}</h2>
+                    <div class="flex space-x-4 mt-2">
+                        <div>
+                            <p class="text-xs text-gray-500">Today</p>
+                            <p class="text-sm font-semibold">{{ $totalInquiriesToday ?? 0 }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Week</p>
+                            <p class="text-sm font-semibold">{{ $totalInquiriesWeek ?? 0 }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500">Month</p>
+                            <p class="text-sm font-semibold">{{ $totalInquiriesMonth ?? 0 }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-primary text-2xl">
+                    <i class="fas fa-inbox"></i>
+                </div>
+            </div>
         </div>
 
-        <nav class="mt-6 space-y-1 px-4">
-            <a href="#" class="flex items-center px-4 py-3 rounded-lg bg-primary text-white">
-                <i class="fas fa-chart-line mr-3"></i> Dashboard
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
-                <i class="fas fa-users mr-3"></i> Customers
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
-                <i class="fas fa-tshirt mr-3"></i> Sportswear
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
-                <i class="fas fa-shopping-cart mr-3"></i> Orders
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
-                <i class="fas fa-chart-pie mr-3"></i> Analytics
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
-                <i class="fas fa-cog mr-3"></i> Settings
-            </a>
-            <form method="Post" action="{{ route('admin.logout') }}">
-                @csrf
-                <button type="submit" class="w-full text-left flex items-center px-4 py-3 rounded-lg hover:bg-gray-100">
-                    <i class="fas fa-sign-out-alt mr-3 "></i> Logout
-                </button>
-            </form>
-        </nav>
-    </aside>
-
-    <!-- ===== Main Content ===== -->
-    <div class="flex-1 flex flex-col">
-
-        <!-- ===== Topbar ===== -->
-        <header class="bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-            <h1 class="text-xl font-semibold text-gray-900">Sportswear Dashboard</h1>
-
-            <div class="flex items-center space-x-4">
-                <button class="relative text-gray-600">
-                    <i class="fas fa-bell text-lg"></i>
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">3</span>
-                </button>
-
-                <div class="flex items-center">
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff" class="w-9 h-9 rounded-full mr-2">
-                    <span class="text-sm font-medium">Admin</span>
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">🆕 New Inquiries</p>
+                    <h2 class="text-2xl font-bold mt-2 text-gray-900">{{ $newInquiriesCount ?? 0 }}</h2>
+                    <p class="text-xs text-blue-600 mt-2"><i class="fas fa-exclamation-circle mr-1"></i> Requires attention</p>
+                </div>
+                <div class="text-red-500 text-2xl">
+                    <i class="fas fa-envelope"></i>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- ===== Dashboard Content ===== -->
-        <main class="p-6 space-y-6">
-
-            <!-- Header Section -->
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
-                <p class="text-gray-600 mt-1">Plan, prioritize, and manage your sportswear business with ease.</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">👤 Total Customers</p>
+                    <h2 class="text-2xl font-bold mt-2 text-gray-900">{{ $totalCustomers ?? 0 }}</h2>
+                    <p class="text-xs text-green-600 mt-2"><i class="fas fa-users mr-1"></i> Active customers</p>
+                </div>
+                <div class="text-green-500 text-2xl">
+                    <i class="fas fa-user-friends"></i>
+                </div>
             </div>
+        </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Total Collections</p>
-                    <h2 class="text-2xl font-bold mt-2 text-gray-900">24</h2>
-                    <p class="text-xs text-green-600 mt-2"><i class="fas fa-arrow-up mr-1"></i> Increased from last month</p>
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">📦 Total Products</p>
+                    <h2 class="text-2xl font-bold mt-2 text-gray-900">{{ $totalProducts ?? 0 }}</h2>
+                    <p class="text-xs text-purple-600 mt-2"><i class="fas fa-box mr-1"></i> Active listings</p>
                 </div>
-
-                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Ended Collections</p>
-                    <h2 class="text-2xl font-bold mt-2 text-gray-900">10</h2>
-                    <p class="text-xs text-green-600 mt-2"><i class="fas fa-arrow-up mr-1"></i> Increased from last month</p>
+                <div class="text-purple-500 text-2xl">
+                    <i class="fas fa-tshirt"></i>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Running Collections</p>
-                    <h2 class="text-2xl font-bold mt-2 text-gray-900">12</h2>
-                    <p class="text-xs text-green-600 mt-2"><i class="fas fa-arrow-up mr-1"></i> Increased from last month</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">⏳ Pending</p>
+                    <h2 class="text-2xl font-bold mt-2 text-yellow-600">{{ $pendingInquiries ?? 0 }}</h2>
                 </div>
+                <div class="text-yellow-500 text-2xl"><i class="fas fa-clock"></i></div>
+            </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">✅ Replied</p>
+                    <h2 class="text-2xl font-bold mt-2 text-blue-600">{{ $repliedInquiries ?? 0 }}</h2>
+                </div>
+                <div class="text-blue-500 text-2xl"><i class="fas fa-reply"></i></div>
+            </div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">🔒 Closed</p>
+                    <h2 class="text-2xl font-bold mt-2 text-green-600">{{ $closedInquiries ?? 0 }}</h2>
+                </div>
+                <div class="text-green-500 text-2xl"><i class="fas fa-check-circle"></i></div>
+            </div>
+        </div>
+    </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-                    <p class="text-sm text-gray-500">Pending Collection</p>
-                    <h2 class="text-2xl font-bold mt-2 text-gray-900">2</h2>
-                    <p class="text-xs text-blue-600 mt-2">In Discussion</p>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">📊 Inquiries Per Day (Last 7 Days)</h3>
+                </div>
+                <div class="h-64">
+                    <canvas id="inquiriesChart"></canvas>
                 </div>
             </div>
 
-            <!-- Two Column Layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Left Column -->
-                <div class="lg:col-span-2 space-y-6">
-                    <!-- Collection Analytics -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Collection Analytics</h3>
-                        <div class="flex justify-between mb-6">
-                            <span class="text-sm text-gray-500">S</span>
-                            <span class="text-sm text-gray-500">M</span>
-                            <span class="text-sm text-gray-500">T</span>
-                            <span class="text-sm text-gray-500">W</span>
-                            <span class="text-sm text-gray-500">T</span>
-                            <span class="text-sm text-gray-500">F</span>
-                            <span class="text-sm text-gray-500">S</span>
-                        </div>
-                        
-                        <!-- Placeholder for chart bars -->
-                        <div class="flex items-end justify-between h-32">
-                            <div class="w-8 bg-blue-100 rounded-t"></div>
-                            <div class="w-8 bg-blue-200 rounded-t"></div>
-                            <div class="w-8 bg-blue-300 rounded-t"></div>
-                            <div class="w-8 bg-blue-400 rounded-t"></div>
-                            <div class="w-8 bg-blue-500 rounded-t"></div>
-                            <div class="w-8 bg-blue-400 rounded-t"></div>
-                            <div class="w-8 bg-blue-300 rounded-t"></div>
-                        </div>
-                    </div>
-
-                    <!-- Team Collaboration -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Team Collaboration</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <h4 class="font-medium text-gray-900">Alexandra Deff</h4>
-                                    <p class="text-sm text-gray-600">Working on New Running Shoe Design</p>
-                                </div>
-                                <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-800">Completed</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <h4 class="font-medium text-gray-900">Edwin Adenike</h4>
-                                    <p class="text-sm text-gray-600">Working on Sportswear E-commerce Integration</p>
-                                </div>
-                                <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800">In Progress</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <h4 class="font-medium text-gray-900">Isaac Oluwatemi</h4>
-                                    <p class="text-sm text-gray-600">Working on Product Filter Functionality</p>
-                                </div>
-                                <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <h4 class="font-medium text-gray-900">David Oshodi</h4>
-                                    <p class="text-sm text-gray-600">Working on Responsive Product Pages</p>
-                                </div>
-                                <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800">In Progress</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">🏷 Product-wise Inquiry Count</h3>
+                <div class="h-64">
+                    <canvas id="productInquiriesChart"></canvas>
                 </div>
+            </div>
+        </div>
 
-                <!-- Right Column -->
-                <div class="space-y-6">
-                    <!-- Reminders -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Reminders</h3>
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h4 class="font-medium text-gray-900">Meeting with Fitness Pro Retail</h4>
-                            <p class="text-sm text-gray-600 mt-1">Time: 02.00 pm - 04.00 pm</p>
-                            <button class="mt-3 w-full bg-primary text-white py-2 rounded-lg hover:bg-primaryHover transition">
-                                Start Meeting
-                            </button>
+        <div class="space-y-6">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">🌍 Top Countries</h3>
+                <div class="h-64">
+                    <canvas id="countriesChart"></canvas>
+                </div>
+                <div class="mt-4 space-y-3">
+                    @forelse($topCountries ?? [] as $country)
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                            <span class="text-sm text-gray-700">{{ $country['name'] }}</span>
                         </div>
+                        <span class="text-sm font-medium">{{ $country['count'] }}</span>
                     </div>
-
-                    <!-- Collection Progress -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Collection Progress</h3>
-                        <div class="text-center mb-4">
-                            <div class="inline-flex items-center justify-center w-32 h-32 rounded-full border-8 border-blue-500 border-t-blue-200" style="transform: rotate(45deg);">
-                                <div class="text-center" style="transform: rotate(-45deg);">
-                                    <span class="text-2xl font-bold text-gray-900">41%</span>
-                                </div>
-                            </div>
-                            <p class="text-sm text-gray-600 mt-4">Collection Ended</p>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                                <span class="text-sm text-gray-600">Completed</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                                <span class="text-sm text-gray-600">In Progress</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                                <span class="text-sm text-gray-600">Pending</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Collection Goals -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Collection Goals</h3>
-                        <div class="space-y-4">
-                            <div class="border-l-4 border-primary pl-3 py-1">
-                                <h4 class="font-medium text-gray-900">Launch Spring Collection</h4>
-                                <p class="text-sm text-gray-600">Due: Nov 26, 2024</p>
-                            </div>
-                            <div class="border-l-4 border-secondary pl-3 py-1">
-                                <h4 class="font-medium text-gray-900">New Customer Onboarding</h4>
-                                <p class="text-sm text-gray-600">Due: Nov 28, 2024</p>
-                            </div>
-                            <div class="border-l-4 border-purple-500 pl-3 py-1">
-                                <h4 class="font-medium text-gray-900">Build Analytics Dashboard</h4>
-                                <p class="text-sm text-gray-600">Due: Nov 30, 2024</p>
-                            </div>
-                            <div class="border-l-4 border-pink-500 pl-3 py-1">
-                                <h4 class="font-medium text-gray-900">Optimize Website Load Time</h4>
-                                <p class="text-sm text-gray-600">Due: Dec 5, 2024</p>
-                            </div>
-                            <div class="border-l-4 border-yellow-500 pl-3 py-1">
-                                <h4 class="font-medium text-gray-900">Cross-Brand Testing</h4>
-                                <p class="text-sm text-gray-600">Due: Dec 6, 2024</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Time Tracker -->
-                    <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Time Tracker</h3>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-gray-900">01:24:08</div>
-                            <p class="text-sm text-gray-600 mt-2">Active work session</p>
-                        </div>
-                    </div>
+                    @empty
+                    <p class="text-xs text-gray-400 text-center italic">No country data available</p>
+                    @endforelse
                 </div>
             </div>
 
-        </main>
-
-        <!-- ===== Footer ===== -->
-        <footer class="bg-white border-t border-gray-200 p-4 text-center text-sm text-gray-600">
-            © {{date('Y')}} SportFit Admin Dashboard. All rights reserved.
-        </footer>
-
+            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">🕒 Recent Activity</h3>
+                <div class="space-y-4">
+                    @forelse($recentActivity ?? [] as $activity)
+                    <div class="flex items-start">
+                        <div class="text-{{ $activity->status == 'new' ? 'blue' : 'green' }}-500 mt-1 mr-3">
+                            <i class="fas fa-{{ $activity->status == 'new' ? 'envelope' : 'check-circle' }}"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">
+                                {{ ucfirst($activity->status) }} inquiry from {{ $activity->name }}
+                            </p>
+                            <p class="text-xs text-gray-500">{{ $activity->created_at->diffForHumans() }}</p>
+                        </div>
+                    </div>
+                    @empty
+                    <p class="text-sm text-gray-500">No recent activity found.</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+@endsection
 
-</body>
-</html>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // 1. Dynamic Data from Laravel Controller
+        const daysLabels = {!! json_encode($days ?? []) !!};
+        const inquiryData = {!! json_encode($inquiryCounts ?? []) !!};
+
+        // We use collect() to prevent null errors if the variable is empty
+        const productLabels = {!! json_encode(collect($productStats ?? [])->pluck('product_category')) !!};
+        const productData = {!! json_encode(collect($productStats ?? [])->pluck('total')) !!};
+
+        const countryLabels = {!! json_encode(collect($topCountries ?? [])->pluck('name')) !!};
+        const countryData = {!! json_encode(collect($topCountries ?? [])->pluck('count')) !!};
+
+        // 2. Line Chart (Inquiries Per Day)
+        new Chart(document.getElementById('inquiriesChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: daysLabels,
+                datasets: [{
+                    label: 'Inquiries',
+                    data: inquiryData,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        // 3. Bar Chart (Product-wise)
+        new Chart(document.getElementById('productInquiriesChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: productLabels,
+                datasets: [{
+                    data: productData,
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)'
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { legend: { display: false } } 
+            }
+        });
+
+        // 4. Doughnut Chart (Top Countries)
+        new Chart(document.getElementById('countriesChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: countryLabels,
+                datasets: [{
+                    data: countryData,
+                    // Added enough colors to support top 5 countries
+                    backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6', '#94a3b8', '#f59e0b']
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+        });
+    });
+</script>
+@endpush

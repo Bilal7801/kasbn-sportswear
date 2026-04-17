@@ -14,6 +14,9 @@ class Admin extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'bio',
+        'profile_image',
         'otp',
         'otp_expires_at',
     ];
