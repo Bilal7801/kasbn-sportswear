@@ -12,4 +12,5 @@
     @include('components.certifications')
     {{-- @include('components.testimonials') --}}
     @include('components.enquiry')
+    
 @endsection

@@ -243,7 +243,7 @@ button.nav-login:hover {
 
 <nav class="navbar" id="navbar">
     <div class="nav-inner">
-        <a href="#" class="nav-logo">
+        <a href="{{ route('home') }}" class="nav-logo">
             <div class="nav-logo-icon"><i class="fas fa-trophy"></i></div>
             <div>
                 <div class="nav-logo-text">SIALKOTPRO</div>
@@ -256,6 +256,7 @@ button.nav-login:hover {
             <li><a href="{{ route('why-us') }}">Why Us</a></li>
             <li><a href="{{ route('process') }}">Process</a></li>
             <li><a href="#certifications">Certifications</a></li>
+            <li><a href="/contact">Contact Us</a></li>
         </ul>
 
         <div class="nav-right">

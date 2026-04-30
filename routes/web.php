@@ -100,3 +100,16 @@ Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function ()
     // --- Other Views ---
     Route::get('/inbox', function () { return view('admin.inbox'); })->name('inbox');
 });
+
+
+// Contact page
+Route::get('/contact', function () {
+    return view('user.contact');
+})->name('contact');
+
+// Contact form submission (placeholder)
+Route::post('/contact', function (Illuminate\Http\Request $request) {
+    // Handle form logic here (e.g., send email, save to database)
+    // For now, just redirect back with a success message.
+    return back()->with('success', 'Thank you for your message. We will get back to you soon.');
+})->name('contact.submit');

@@ -269,7 +269,7 @@
 
     @yield('content')
 
-    {{-- @include('components.footer') --}}
+    @include('components.footer')
 
     {{-- WhatsApp Float --}}
     <a href="https://wa.me/923001234567?text=Hello%2C%20I%20am%20interested%20in%20bulk%20sports%20goods%20order."

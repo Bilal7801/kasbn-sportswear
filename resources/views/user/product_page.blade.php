@@ -1,8 +1,4 @@
-{{-- 
-    product_page.blade.php
-    Extends the main layout (layouts.app).
---}}
-
+{{-- product_page.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'All Products – Premium Sports Goods Manufacturer | SialkotPro')
@@ -18,7 +14,7 @@
     .products-header {
         display: flex;
         justify-content: space-between;
-        align-items: center; /* Changed to center for search alignment */
+        align-items: center;
         margin-bottom: 48px;
         flex-wrap: wrap;
         gap: 20px;
@@ -138,13 +134,14 @@
         padding: 4px 10px;
     }
 
+    /* ========== MOQ badge – white text on black ========== */
     .product-moq {
         position: absolute;
         top: 12px;
         right: 12px;
-        background: rgba(10, 12, 16, 0.85);
-        border: 1px solid rgba(201, 168, 76, 0.3);
-        color: var(--gold);
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.3);
         font-family: var(--font-cond);
         font-size: 10px;
         letter-spacing: 1px;
@@ -232,6 +229,42 @@
     .product-enquire:hover {
         background: var(--gold);
         color: var(--dark);
+    }
+
+    /* ========== Pagination styling ========== */
+    .pagination-wrapper {
+        margin-top: 48px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .pagination-btn {
+        background: var(--dark-3);
+        border: 1px solid rgba(201,168,76,0.15);
+        color: var(--muted);
+        font-family: var(--font-cond);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        padding: 10px 18px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-transform: uppercase;
+    }
+    .pagination-btn:hover {
+        background: var(--gold);
+        color: var(--dark);
+    }
+    .pagination-btn.active {
+        background: var(--gold);
+        color: var(--dark);
+        font-weight: 700;
+        border-color: var(--gold);
+    }
+    .pagination-btn:disabled {
+        opacity: 0.4;
+        pointer-events: none;
     }
 
     /* Responsive */
@@ -340,47 +373,14 @@
                 </div>
             </div>
 
-            @php
-                // Extended product list
-                $products = [
-                    ['icon'=>'fa-football-ball','tag'=>'Leather','filter'=>'leather','name'=>'Match Footballs','desc'=>'FIFA-standard hand-stitched leather footballs. Size 3,4,5. Full custom logo & design.','moq'=>'MOQ: 500 pcs','specs'=>['Hand Stitched','Full Custom','FIFA Standard'],'price'=>'From $4.50/pc'],
-                    ['icon'=>'fa-boxing-glove','tag'=>'Boxing','filter'=>'boxing','name'=>'Boxing Gloves','desc'=>'Genuine leather & synthetic options. 8oz–18oz. Pro-grade padding, custom colors.','moq'=>'MOQ: 200 prs','specs'=>['Genuine Leather','Custom Design','OEM Branding'],'price'=>'From $6.00/pr'],
-                    ['icon'=>'fa-tshirt','tag'=>'Textile','filter'=>'textile','name'=>'Sports Jerseys','desc'=>'Sublimation-printed polyester kits. Club, national & custom designs. Full team sets.','moq'=>'MOQ: 100 pcs','specs'=>['Sublimation Print','Quick Dry Fabric','Custom Sizes'],'price'=>'From $3.20/pc'],
-                    ['icon'=>'fa-baseball-ball','tag'=>'Leather','filter'=>'leather','name'=>'Cricket Equipment','desc'=>'English willow & Kashmir willow bats, leather balls, pads, gloves. Tournament grade.','moq'=>'MOQ: 100 pcs','specs'=>['English Willow','Hand Crafted','Export Grade'],'price'=>'From $8.00/pc'],
-                    ['icon'=>'fa-hockey-puck','tag'=>'Leather','filter'=>'leather','name'=>'Hockey Goods','desc'=>'FIH-grade field hockey sticks and balls. Composite, fibreglass, wood options.','moq'=>'MOQ: 150 pcs','specs'=>['FIH Grade','Composite Available','Club Branding'],'price'=>'From $5.00/pc'],
-                    ['icon'=>'fa-paint-brush','tag'=>'OEM','filter'=>'oem','name'=>'Private Label / OEM','desc'=>'Your brand, our factory. Full product development, custom labels, hang tags, packaging.','moq'=>'MOQ: Varies','specs'=>['Private Label','Custom Packaging','Artwork Support'],'price'=>'Get Custom Quote'],
-                    ['icon'=>'fa-futbol','tag'=>'Leather','filter'=>'leather','name'=>'Rugby Balls','desc'=>'Premium hand-stitched leather rugby balls. Match quality, custom print available.','moq'=>'MOQ: 300 pcs','specs'=>['Hand Stitched','Water Resistant','Club Logo'],'price'=>'From $5.50/pc'],
-                    ['icon'=>'fa-hand-peace','tag'=>'Boxing','filter'=>'boxing','name'=>'MMA & Grappling Gloves','desc'=>'High-density foam, reinforced stitching. Ideal for training and competition.','moq'=>'MOQ: 100 prs','specs'=>['Vegan Leather','Breathable Mesh','Custom Colors'],'price'=>'From $7.20/pr'],
-                    ['icon'=>'fa-bicycle','tag'=>'Textile','filter'=>'textile','name'=>'Cycling Kits','desc'=>'Aero-fit jersey & bib shorts. Moisture-wicking fabric, custom sublimation.','moq'=>'MOQ: 50 sets','specs'=>['UPF 50+','Pro Fit','Team Design'],'price'=>'From $12.00/set'],
-                ];
-            @endphp
-
+            {{-- Products Grid (populated by JS) --}}
             <div class="products-grid stagger-parent" id="productsGrid">
-                @foreach($products as $p)
-                    <div class="product-card stagger" data-filter="{{ $p['filter'] }}">
-                        <div class="product-card-img">
-                            <i class="fas {{ $p['icon'] }}"></i>
-                            <span class="product-tag">{{ $p['tag'] }}</span>
-                            <span class="product-moq">{{ $p['moq'] }}</span>
-                        </div>
-                        <div class="product-card-body">
-                            <div class="product-name">{{ $p['name'] }}</div>
-                            <div class="product-desc">{{ $p['desc'] }}</div>
-                            <div class="product-specs">
-                                @foreach($p['specs'] as $spec)
-                                    <span class="product-spec"><i class="fas fa-check"></i> {{ $spec }}</span>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="product-card-footer">
-                            <div>
-                                <div class="product-price-label">Bulk Price</div>
-                                <div class="product-price">{{ $p['price'] }}</div>
-                            </div>
-                            <a href="#quick-enquiry" class="product-enquire">Enquire Now</a>
-                        </div>
-                    </div>
-                @endforeach
+                {{-- Products will be rendered by JavaScript --}}
+            </div>
+
+            {{-- Pagination Controls --}}
+            <div class="pagination-wrapper fade-up" id="paginationContainer">
+                {{-- Page buttons generated by JS --}}
             </div>
         </div>
     </section>
@@ -395,6 +395,7 @@
                     Tell us your product, quantity, and destination. We’ll reply within 24 hours with a custom quote.
                 </p>
                 <form method="POST" action="#" class="inline-form">
+                    @csrf
                     <input type="text" name="name" placeholder="Your name *" required>
                     <input type="email" name="email" placeholder="Email address *" required>
                     <select name="product_interest">
@@ -417,49 +418,143 @@
 
 @push('scripts')
 <script>
+    // ==================== PRODUCT DATA ====================
+  
+    const products = [
+        {icon:'fa-football-ball',tag:'Leather',filter:'leather',name:'Match Footballs',desc:'FIFA-standard hand-stitched leather footballs. Size 3,4,5. Full custom logo & design.',moq:'MOQ: 500 pcs',specs:['Hand Stitched','Full Custom','FIFA Standard'],price:'From $4.50/pc'},
+        {icon:'fa-boxing-glove',tag:'Boxing',filter:'boxing',name:'Boxing Gloves',desc:'Genuine leather & synthetic options. 8oz–18oz. Pro-grade padding, custom colors.',moq:'MOQ: 200 prs',specs:['Genuine Leather','Custom Design','OEM Branding'],price:'From $6.00/pr'},
+        {icon:'fa-tshirt',tag:'Textile',filter:'textile',name:'Sports Jerseys',desc:'Sublimation-printed polyester kits. Club, national & custom designs. Full team sets.',moq:'MOQ: 100 pcs',specs:['Sublimation Print','Quick Dry Fabric','Custom Sizes'],price:'From $3.20/pc'},
+        {icon:'fa-baseball-ball',tag:'Leather',filter:'leather',name:'Cricket Equipment',desc:'English willow & Kashmir willow bats, leather balls, pads, gloves. Tournament grade.',moq:'MOQ: 100 pcs',specs:['English Willow','Hand Crafted','Export Grade'],price:'From $8.00/pc'},
+        {icon:'fa-hockey-puck',tag:'Leather',filter:'leather',name:'Hockey Goods',desc:'FIH-grade field hockey sticks and balls. Composite, fibreglass, wood options.',moq:'MOQ: 150 pcs',specs:['FIH Grade','Composite Available','Club Branding'],price:'From $5.00/pc'},
+        {icon:'fa-paint-brush',tag:'OEM',filter:'oem',name:'Private Label / OEM',desc:'Your brand, our factory. Full product development, custom labels, hang tags, packaging.',moq:'MOQ: Varies',specs:['Private Label','Custom Packaging','Artwork Support'],price:'Get Custom Quote'},
+        {icon:'fa-futbol',tag:'Leather',filter:'leather',name:'Rugby Balls',desc:'Premium hand-stitched leather rugby balls. Match quality, custom print available.',moq:'MOQ: 300 pcs',specs:['Hand Stitched','Water Resistant','Club Logo'],price:'From $5.50/pc'},
+        {icon:'fa-hand-peace',tag:'Boxing',filter:'boxing',name:'MMA & Grappling Gloves',desc:'High-density foam, reinforced stitching. Ideal for training and competition.',moq:'MOQ: 100 prs',specs:['Vegan Leather','Breathable Mesh','Custom Colors'],price:'From $7.20/pr'},
+        {icon:'fa-bicycle',tag:'Textile',filter:'textile',name:'Cycling Kits',desc:'Aero-fit jersey & bib shorts. Moisture-wicking fabric, custom sublimation.',moq:'MOQ: 50 sets',specs:['UPF 50+','Pro Fit','Team Design'],price:'From $12.00/set'},
+    ];
+
+    // ==================== PAGINATION SETUP ====================
+    const itemsPerPage = 6; // 2 rows of 3 columns
+    let currentPage = 1;
+    let filteredProducts = [...products];
+
+    // DOM elements
+    const grid = document.getElementById('productsGrid');
+    const paginationContainer = document.getElementById('paginationContainer');
     const searchInput = document.getElementById('productSearch');
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const productCards = document.querySelectorAll('.product-card');
+    let activeFilter = 'all';
 
-    function filterProducts() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const activeBtn = document.querySelector('.filter-btn.active');
-        const activeFilter = activeBtn.dataset.filter;
+    // ==================== RENDER FUNCTIONS ====================
+    function renderProductCard(product) {
+        return `
+            <div class="product-card stagger" data-filter="${product.filter}">
+                <div class="product-card-img">
+                    <i class="fas ${product.icon}"></i>
+                    <span class="product-tag">${product.tag}</span>
+                    <span class="product-moq">${product.moq}</span>
+                </div>
+                <div class="product-card-body">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-desc">${product.desc}</div>
+                    <div class="product-specs">
+                        ${product.specs.map(spec => `<span class="product-spec"><i class="fas fa-check"></i> ${spec}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="product-card-footer">
+                    <div>
+                        <div class="product-price-label">Bulk Price</div>
+                        <div class="product-price">${product.price}</div>
+                    </div>
+                    <a href="#quick-enquiry" class="product-enquire">Enquire Now</a>
+                </div>
+            </div>
+        `;
+    }
 
-        productCards.forEach(card => {
-            const productName = card.querySelector('.product-name').textContent.toLowerCase();
-            const cardCategory = card.dataset.filter;
+    function renderPage(page) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageItems = filteredProducts.slice(start, end);
 
-            const matchesSearch = productName.includes(searchTerm);
-            const matchesCategory = (activeFilter === 'all' || cardCategory === activeFilter);
+        grid.innerHTML = pageItems.map(renderProductCard).join('');
 
-            if (matchesSearch && matchesCategory) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
+        // Re‑attach enquire link smooth scroll (since they are new elements)
+        document.querySelectorAll('.product-enquire').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector('#quick-enquiry');
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+        if (totalPages <= 1) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+        // Previous button
+        html += `<button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i></button>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        }
+
+        // Next button
+        html += `<button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} data-page="next"><i class="fas fa-chevron-right"></i></button>`;
+
+        paginationContainer.innerHTML = html;
+
+        // Add event listeners to page buttons
+        paginationContainer.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pageAttr = this.getAttribute('data-page');
+                if (pageAttr === 'prev') {
+                    if (currentPage > 1) currentPage--;
+                } else if (pageAttr === 'next') {
+                    const total = Math.ceil(filteredProducts.length / itemsPerPage);
+                    if (currentPage < total) currentPage++;
+                } else {
+                    currentPage = parseInt(pageAttr);
+                }
+                renderPage(currentPage);
+            });
         });
     }
 
-    // Filter Button Click
+    function filterProducts() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        filteredProducts = products.filter(product => {
+            const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+            const matchesCategory = activeFilter === 'all' || product.filter === activeFilter;
+            return matchesSearch && matchesCategory;
+        });
+
+        currentPage = 1; // reset to first page after filter
+        renderPage(currentPage);
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    // Filter buttons
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
+            activeFilter = this.dataset.filter;
             filterProducts();
         });
     });
 
-    // Search Input Event
+    // Search input
     searchInput.addEventListener('input', filterProducts);
 
-    // Smooth scroll for enquire links
-    document.querySelectorAll('.product-enquire').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector('#quick-enquiry');
-            if (target) target.scrollIntoView({ behavior: 'smooth' });
-        });
-    });
+    // Initial render
+    renderPage(currentPage);
 </script>
 @endpush
