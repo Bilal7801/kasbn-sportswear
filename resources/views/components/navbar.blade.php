@@ -1,16 +1,23 @@
+{{-- components/navbar.blade.php — White & Grey version --}}
+
 <style>
 .navbar {
     position: fixed;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
     transition: background 0.3s, box-shadow 0.3s;
     padding: 0;
+    /* default transparent background */
+    background: transparent;
 }
 .navbar.scrolled {
-    background: rgba(10, 12, 16, 0.95);
+    background: rgba(255, 255, 255, 0.97);   /* white with slight transparency */
     backdrop-filter: blur(12px);
-    box-shadow: 0 1px 0 rgba(201, 168, 76, 0.2);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.08);    /* subtle black shadow */
 }
+
 .nav-inner {
     max-width: 1200px;
     margin: 0 auto;
@@ -20,6 +27,8 @@
     align-items: center;
     justify-content: space-between;
 }
+
+/* ── Logo ── */
 .nav-logo {
     display: flex;
     align-items: center;
@@ -27,113 +36,214 @@
     text-decoration: none;
 }
 .nav-logo-icon {
-    width: 40px; height: 40px;
-    background: var(--gold);
-    display: flex; align-items: center; justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #000000;                     /* black hexagon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
-.nav-logo-icon i { color: var(--dark); font-size: 18px; }
+.nav-logo-icon i {
+    color: #ffffff;                          /* white icon */
+    font-size: 18px;
+}
 .nav-logo-text {
     font-family: var(--font-cond);
-    font-size: 22px; font-weight: 700;
-    letter-spacing: 2px; color: var(--white); line-height: 1;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #111827;                          /* near black */
+    line-height: 1;
 }
 .nav-logo-sub {
     font-family: var(--font-body);
-    font-size: 9px; letter-spacing: 3px;
-    color: var(--gold); text-transform: uppercase;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #4b5563;                          /* medium grey */
+    text-transform: uppercase;
 }
+
+/* ── Desktop links ── */
 .nav-links {
-    display: flex; align-items: center;
-    gap: 36px; list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
 }
 .nav-links a {
     font-family: var(--font-cond);
-    font-size: 13px; font-weight: 600;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: rgba(240,237,230,0.75);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4b5563;                          /* medium grey */
     text-decoration: none;
     transition: color 0.2s;
-    position: relative; padding-bottom: 4px;
+    position: relative;
+    padding-bottom: 4px;
 }
 .nav-links a::after {
     content: '';
-    position: absolute; bottom: 0; left: 0;
-    width: 0; height: 1px;
-    background: var(--gold);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #000000;                    /* black underline */
     transition: width 0.3s;
 }
-.nav-links a:hover { color: var(--gold); }
-.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover {
+    color: #000000;                         /* black on hover */
+}
+.nav-links a:hover::after {
+    width: 100%;
+}
 
-/* Nav right: login + CTA */
+/* ── Right side (login + CTA) ── */
 .nav-right {
-    display: flex; align-items: center; gap: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 .nav-login {
     font-family: var(--font-cond);
-    font-size: 12px; font-weight: 600;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: rgba(240,237,230,0.6);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4b5563;
     text-decoration: none;
-    display: flex; align-items: center; gap: 7px;
-    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: color 0.2s, border-color 0.2s;
     padding: 4px 0;
     border-bottom: 1px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
-.nav-login:hover { color: var(--gold); border-color: rgba(201,168,76,0.4); }
-.nav-login i { font-size: 13px; }
+.nav-login:hover {
+    color: #000000;
+    border-bottom-color: #d1d5db;
+}
+.nav-login i {
+    font-size: 13px;
+}
+/* Logout button styling (same as login) */
+button.nav-login {
+    font-family: var(--font-cond);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4b5563;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+button.nav-login:hover {
+    color: #000000;
+    border-bottom-color: #d1d5db;
+}
 
+/* ── CTA Button ── */
 .nav-cta {
     font-family: var(--font-cond);
-    font-size: 12px; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--dark); background: var(--gold);
-    padding: 10px 22px; text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffffff;                        /* white text */
+    background: #000000;                   /* black background */
+    padding: 10px 22px;
+    text-decoration: none;
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
     transition: background 0.2s;
 }
-.nav-cta:hover { background: var(--gold-light); }
+.nav-cta:hover {
+    background: #374151;                   /* dark grey hover */
+}
 
+/* ── Hamburger ── */
 .nav-hamburger {
-    display: none; background: none; border: none;
-    cursor: pointer; flex-direction: column; gap: 5px; padding: 4px;
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
 }
 .nav-hamburger span {
-    display: block; width: 24px; height: 2px;
-    background: var(--gold); transition: all 0.3s;
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #000000;                   /* black lines */
+    transition: all 0.3s;
 }
+
+/* ── Mobile menu ── */
 .mobile-menu {
     display: none;
-    position: fixed; top: 72px; left: 0; right: 0;
-    background: var(--dark-2);
-    border-top: 1px solid rgba(201,168,76,0.2);
-    padding: 24px; z-index: 999;
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: #ffffff;                   /* white background */
+    border-top: 1px solid #e5e7eb;
+    padding: 24px;
+    z-index: 999;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
-.mobile-menu.open { display: block; }
-.mobile-menu ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+.mobile-menu.open {
+    display: block;
+}
+.mobile-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 .mobile-menu a {
     font-family: var(--font-cond);
-    font-size: 18px; font-weight: 600;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--light); text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #111827;                        /* near black */
+    text-decoration: none;
 }
-.mobile-menu a:hover { color: var(--gold); }
+.mobile-menu a:hover {
+    color: #000000;
+}
 .mobile-menu-divider {
     height: 1px;
-    background: rgba(201,168,76,0.15);
+    background: #d1d5db;                   /* light grey divider */
     margin: 8px 0;
 }
+
+/* ── Responsive ── */
 @media (max-width: 900px) {
-    .nav-links, .nav-right { display: none; }
-    .nav-hamburger { display: flex; }
+    .nav-links,
+    .nav-right {
+        display: none;
+    }
+    .nav-hamburger {
+        display: flex;
+    }
 }
 </style>
 
 <nav class="navbar" id="navbar">
     <div class="nav-inner">
-        <a href="#" class="nav-logo">
+        <a href="{{ route('home') }}" class="nav-logo">
             <div class="nav-logo-icon"><i class="fas fa-trophy"></i></div>
             <div>
                 <div class="nav-logo-text">SIALKOTPRO</div>
@@ -142,11 +252,11 @@
         </a>
 
         <ul class="nav-links">
-            <li><a href="#products">Products</a></li>
+            <li><a href="{{ route('products') }}">Products</a></li>
             <li><a href="{{ route('why-us') }}">Why Us</a></li>
-            <li><a href="#process">Process</a></li>
+            <li><a href="{{ route('process') }}">Process</a></li>
             <li><a href="#certifications">Certifications</a></li>
-            <li><a href="#testimonials">Clients</a></li>
+            <li><a href="/contact">Contact Us</a></li>
         </ul>
 
         <div class="nav-right">
@@ -156,7 +266,7 @@
                 </a>
                 <form method="POST" action="{{ route('logout') }}" style="display:inline">
                     @csrf
-                    <button type="submit" class="nav-login" style="background:none;border:none;cursor:pointer;border-bottom:1px solid transparent;">
+                    <button type="submit" class="nav-login">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </button>
                 </form>
@@ -165,7 +275,7 @@
                     <i class="fas fa-user-circle"></i> Login
                 </a>
             @endauth
-            <a href="#enquiry" class="nav-cta">Request Quote</a>
+            <a href="/enquiry" class="nav-cta">Request Quote</a>
         </div>
 
         <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
@@ -188,8 +298,6 @@
         @else
             <li><a href="{{ route('user.login') }}" onclick="closeMobile()"><i class="fas fa-user-circle" style="margin-right:8px"></i>Login</a></li>
         @endauth
-
-        
     </ul>
 </div>
 
@@ -200,5 +308,7 @@
     document.getElementById('hamburger').addEventListener('click', () => {
         document.getElementById('mobileMenu').classList.toggle('open');
     });
-    function closeMobile() { document.getElementById('mobileMenu').classList.remove('open'); }
+    function closeMobile() {
+        document.getElementById('mobileMenu').classList.remove('open');
+    }
 </script>

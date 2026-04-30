@@ -3,5 +3,5 @@
 @section('title', 'Why Choose SialkotPro – Manufacturer Advantages')
 
 @section('content')
-    @include('components.why-us')
+    @include('components.process')
 @endsection
