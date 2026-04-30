@@ -262,7 +262,7 @@ body{font-family:var(--font-body);background:var(--bg-main);color:var(--text-pri
     </div>
   </div>
   <div class="left-center">
-    <div class="left-tagline">WORLD CLASS<br><span>SPORTS</span><br>GOODS</div>
+    <div class="left-tagline">WORLD CLASS<br><span>SPORTS</span>GOODS</div>
     <p class="left-desc">Manage your enquiries, orders and export operations from one secure dashboard.</p>
     <div class="left-stats">
       <div class="lst"><span class="lst-n">40+</span><span class="lst-l">Countries</span></div>

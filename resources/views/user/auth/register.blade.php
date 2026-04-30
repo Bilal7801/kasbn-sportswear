@@ -265,7 +265,7 @@ body{font-family:var(--font-body);background:var(--bg-main);color:var(--text-pri
     </div>
   </div>
   <div class="left-center">
-    <div class="left-tagline">JOIN THE<br><span>ELITE NETWORK</span><br>OF MAKERS</div>
+    <div class="left-tagline">JOIN THE<br><span>ELITE NETWORK</span>OF MAKERS</div>
     <p class="left-desc">Get access to real‑time trade insights, order management, and premium buyer connections.</p>
     <div class="left-stats">
       <div class="lst"><span class="lst-n">150+</span><span class="lst-l">Active Clients</span></div>

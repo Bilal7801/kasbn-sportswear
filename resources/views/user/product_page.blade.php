@@ -1,8 +1,6 @@
 {{-- 
     product_page.blade.php
-    Extends the main layout (layouts.master by default).
-    Make sure the layout file exists at resources/views/layouts/master.blade.php
-    or change @extends('layouts.master') to your actual layout name.
+    Extends the main layout (layouts.app).
 --}}
 
 @extends('layouts.app')
@@ -20,7 +18,7 @@
     .products-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-end;
+        align-items: center; /* Changed to center for search alignment */
         margin-bottom: 48px;
         flex-wrap: wrap;
         gap: 20px;
@@ -30,6 +28,39 @@
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
+    }
+
+    /* Search Input Styling */
+    .search-container {
+        position: relative;
+        min-width: 280px;
+    }
+
+    .search-input {
+        width: 100%;
+        background: var(--dark-3);
+        border: 1px solid rgba(201, 168, 76, 0.2);
+        padding: 10px 15px 10px 40px;
+        color: var(--white);
+        font-family: var(--font-body);
+        font-size: 13px;
+        outline: none;
+        transition: all 0.3s;
+    }
+
+    .search-input:focus {
+        border-color: var(--gold);
+        background: var(--dark-4);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gold);
+        font-size: 14px;
+        pointer-events: none;
     }
 
     .filter-btn {
@@ -214,6 +245,9 @@
         .products-grid {
             grid-template-columns: 1fr;
         }
+        .search-container {
+            width: 100%;
+        }
     }
 
     /* Page specific enquiry section (dark theme) */
@@ -266,6 +300,7 @@
         font-family: var(--font-cond);
         font-weight: 700;
         letter-spacing: 2px;
+        text-transform: uppercase;
         cursor: pointer;
         transition: 0.2s;
     }
@@ -289,9 +324,8 @@
                 </p>
             </div>
 
-            {{-- Filter + Grid --}}
+            {{-- Filter + Search Bar --}}
             <div class="products-header fade-up">
-                <div></div> {{-- empty spacer for alignment --}}
                 <div class="products-filter">
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="leather">Leather</button>
@@ -299,10 +333,15 @@
                     <button class="filter-btn" data-filter="boxing">Boxing / MMA</button>
                     <button class="filter-btn" data-filter="oem">OEM / Custom</button>
                 </div>
+
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="productSearch" class="search-input" placeholder="Search by product name...">
+                </div>
             </div>
 
             @php
-                // Extended product list (same as original + a few extra for realism)
+                // Extended product list
                 $products = [
                     ['icon'=>'fa-football-ball','tag'=>'Leather','filter'=>'leather','name'=>'Match Footballs','desc'=>'FIFA-standard hand-stitched leather footballs. Size 3,4,5. Full custom logo & design.','moq'=>'MOQ: 500 pcs','specs'=>['Hand Stitched','Full Custom','FIFA Standard'],'price'=>'From $4.50/pc'],
                     ['icon'=>'fa-boxing-glove','tag'=>'Boxing','filter'=>'boxing','name'=>'Boxing Gloves','desc'=>'Genuine leather & synthetic options. 8oz–18oz. Pro-grade padding, custom colors.','moq'=>'MOQ: 200 prs','specs'=>['Genuine Leather','Custom Design','OEM Branding'],'price'=>'From $6.00/pr'],
@@ -316,7 +355,7 @@
                 ];
             @endphp
 
-            <div class="products-grid stagger-parent">
+            <div class="products-grid stagger-parent" id="productsGrid">
                 @foreach($products as $p)
                     <div class="product-card stagger" data-filter="{{ $p['filter'] }}">
                         <div class="product-card-img">
@@ -346,7 +385,7 @@
         </div>
     </section>
 
-    {{-- Enquiry section – enquiry-based website core --}}
+    {{-- Enquiry section --}}
     <section class="page-enquiry" id="quick-enquiry">
         <div class="container">
             <div class="enquiry-card fade-up">
@@ -378,17 +417,41 @@
 
 @push('scripts')
 <script>
-    // Product filter functionality
-    document.querySelectorAll('.filter-btn').forEach(btn => {
+    const searchInput = document.getElementById('productSearch');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const productCards = document.querySelectorAll('.product-card');
+
+    function filterProducts() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const activeBtn = document.querySelector('.filter-btn.active');
+        const activeFilter = activeBtn.dataset.filter;
+
+        productCards.forEach(card => {
+            const productName = card.querySelector('.product-name').textContent.toLowerCase();
+            const cardCategory = card.dataset.filter;
+
+            const matchesSearch = productName.includes(searchTerm);
+            const matchesCategory = (activeFilter === 'all' || cardCategory === activeFilter);
+
+            if (matchesSearch && matchesCategory) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Filter Button Click
+    filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            const filter = this.dataset.filter;
-            document.querySelectorAll('.product-card').forEach(card => {
-                card.style.display = (filter === 'all' || card.dataset.filter === filter) ? 'block' : 'none';
-            });
+            filterProducts();
         });
     });
+
+    // Search Input Event
+    searchInput.addEventListener('input', filterProducts);
 
     // Smooth scroll for enquire links
     document.querySelectorAll('.product-enquire').forEach(link => {

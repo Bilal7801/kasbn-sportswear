@@ -10,6 +10,6 @@
     @include('components.why-us')
     @include('components.process')
     @include('components.certifications')
-    @include('components.testimonials')
+    {{-- @include('components.testimonials') --}}
     @include('components.enquiry')
 @endsection

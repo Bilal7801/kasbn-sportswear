@@ -25,10 +25,10 @@
 <section class="stats-section">
     <div class="container">
         <div class="stats-grid fade-up">
-            <div class="stat-item stagger"><span class="stat-num">500K+</span><span class="stat-label">Units Exported Annually</span></div>
+            <div class="stat-item stagger"><span class="stat-num">50K+</span><span class="stat-label">Units Exported Annually</span></div>
             <div class="stat-item stagger"><span class="stat-num">40+</span><span class="stat-label">Countries We Export To</span></div>
             <div class="stat-item stagger"><span class="stat-num">250+</span><span class="stat-label">Active Product SKUs</span></div>
-            <div class="stat-item stagger"><span class="stat-num">48hr</span><span class="stat-label">Average Sample Lead Time</span></div>
+            <div class="stat-item stagger"><span class="stat-num">3-7 Days</span><span class="stat-label">Average Sample Lead Time</span></div>
         </div>
     </div>
 </section>
