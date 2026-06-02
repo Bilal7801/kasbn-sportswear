@@ -1,560 +1,1065 @@
 {{-- product_page.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'All Products – Premium Sports Goods Manufacturer | SialkotPro')
+@section('title', 'Shop All Products – Premium Sportswear | KASBN')
 
 @push('styles')
 <style>
-    /* Product card specific styles (inherits layout CSS variables) */
-    .products-section {
-        padding: 100px 0;
-        background: var(--dark);
+    /* ========== PREMIUM HERO BANNER SECTION ========== */
+    .products-page-hero {
+        min-height: 520px;
+        background: linear-gradient(rgba(15, 15, 15, 0.85), rgba(26, 26, 26, 0.95)),
+                    url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+        background-color: #121212;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding: 100px 20px 60px;
     }
 
-    .products-header {
+    .hero-tech-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 30px 30px;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .hero-kinetic-watermark {
+        position: absolute;
+        bottom: -10px;
+        right: -5%;
+        font-size: clamp(100px, 18vw, 240px);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -5px;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.03);
+        user-select: none;
+        pointer-events: none;
+        z-index: 1;
+        font-style: italic;
+    }
+
+    .hero-sport-slash {
+        position: absolute;
+        top: 0;
+        right: 25%;
+        width: 150px;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(255, 107, 53, 0.08), transparent);
+        transform: skewX(-25deg);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .products-hero-content {
+        position: relative;
+        z-index: 3;
+        text-align: center;
+        max-width: 850px;
+        animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .products-hero-subtitle {
+        font-size: 13px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 107, 53, 0.1);
+        padding: 6px 16px;
+        border-radius: 50px;
+        border: 1px solid rgba(255, 107, 53, 0.2);
+    }
+
+    .orange-accent-bar {
+        width: 6px;
+        height: 6px;
+        background: #ff6b35;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 8px #ff6b35;
+    }
+
+    .products-hero-title {
+        font-size: clamp(38px, 6vw, 62px);
+        font-weight: 900;
+        line-height: 1.15;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+    }
+
+    .highlight-orange {
+        color: #ff6b35;
+        text-shadow: 0 0 30px rgba(255, 107, 53, 0.2);
+    }
+
+    .products-hero-description {
+        font-size: 17px;
+        color: #cccccc;
+        max-width: 650px;
+        margin: 0 auto 40px;
+        line-height: 1.6;
+    }
+
+    .hero-feature-badges {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .hero-badge-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 12px 20px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        backdrop-filter: blur(5px);
+        transition: all 0.3s ease;
+    }
+
+    .hero-badge-item:hover {
+        background: rgba(255, 107, 53, 0.05);
+        border-color: rgba(255, 107, 53, 0.3);
+        transform: translateY(-3px);
+    }
+
+    .hero-badge-item i {
+        color: #ff6b35;
+        font-size: 14px;
+    }
+
+    .hero-badge-item span {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #e0e0e0;
+    }
+
+    .hero-bottom-fade {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: linear-gradient(to top, #ffffff, transparent);
+        z-index: 2;
+    }
+
+    /* ========== PRODUCTS CORE CATALOG SECTION ========== */
+    .products-section {
+        padding: 80px 20px;
+        background: #ffffff;
+    }
+
+    .catalog-container {
+        max-width: 1500px;
+        width: 92%;
+        margin: 0 auto;
+    }
+
+    .products-top-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 48px;
+        margin-bottom: 50px;
         flex-wrap: wrap;
-        gap: 20px;
+        gap: 30px;
+    }
+
+    .products-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1a1a1a;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .products-filter {
         display: flex;
-        gap: 8px;
+        gap: 12px;
         flex-wrap: wrap;
-    }
-
-    /* Search Input Styling */
-    .search-container {
-        position: relative;
-        min-width: 280px;
-    }
-
-    .search-input {
-        width: 100%;
-        background: var(--dark-3);
-        border: 1px solid rgba(201, 168, 76, 0.2);
-        padding: 10px 15px 10px 40px;
-        color: var(--white);
-        font-family: var(--font-body);
-        font-size: 13px;
-        outline: none;
-        transition: all 0.3s;
-    }
-
-    .search-input:focus {
-        border-color: var(--gold);
-        background: var(--dark-4);
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--gold);
-        font-size: 14px;
-        pointer-events: none;
     }
 
     .filter-btn {
         background: transparent;
-        border: 1px solid rgba(201, 168, 76, 0.25);
-        color: var(--muted);
-        font-family: var(--font-cond);
-        font-size: 12px;
-        letter-spacing: 2px;
+        border: 2px solid #ddd;
+        color: #666;
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 1px;
         text-transform: uppercase;
-        padding: 8px 18px;
+        padding: 10px 22px;
         cursor: pointer;
-        transition: all 0.2s;
+        border-radius: 4px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .filter-btn:hover,
+    .filter-btn:hover {
+        border-color: #ff6b35;
+        color: #ff6b35;
+    }
+
     .filter-btn.active {
-        background: var(--gold);
-        color: var(--dark);
-        border-color: var(--gold);
+        background: #ff6b35;
+        color: white;
+        border-color: #ff6b35;
+    }
+
+    .search-container {
+        position: relative;
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .search-input {
+        width: 100%;
+        background: white;
+        border: 2px solid #ddd;
+        padding: 12px 15px 12px 40px;
+        color: #1a1a1a;
+        font-size: 14px;
+        outline: none;
+        border-radius: 4px;
+        transition: all 0.3s ease-out;
+    }
+
+    .search-input:focus {
+        border-color: #ff6b35;
+        box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #ff6b35;
+        font-size: 16px;
+        pointer-events: none;
     }
 
     .products-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
     }
 
+    /* CHANGED: card is now a DIV, not an anchor */
     .product-card {
-        background: var(--dark-3);
-        border: 1px solid rgba(201, 168, 76, 0.12);
+        background: white;
+        border-radius: 8px;
         overflow: hidden;
-        transition: border-color 0.3s, transform 0.3s;
-        cursor: pointer;
-        position: relative;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        animation: fadeInUp 0.8s ease-out;
     }
 
     .product-card:hover {
-        border-color: rgba(201, 168, 76, 0.5);
-        transform: translateY(-4px);
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+
+    /* This is the clickable product area */
+    .product-main-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
     }
 
     .product-card-img {
-        height: 200px;
-        background: var(--dark-4);
+        height: 300px;
+        background: #fcfcfc;
         display: flex;
         align-items: center;
         justify-content: center;
         position: relative;
         overflow: hidden;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .product-card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        padding: 0;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .product-main-link:hover .product-card-img img {
+        transform: scale(1.05);
     }
 
     .product-card-img i {
         font-size: 60px;
-        color: rgba(201, 168, 76, 0.25);
-        transition: color 0.3s, transform 0.3s;
-    }
-
-    .product-card:hover .product-card-img i {
-        color: rgba(201, 168, 76, 0.5);
-        transform: scale(1.1);
+        color: #ddd;
     }
 
     .product-tag {
         position: absolute;
         top: 12px;
         left: 12px;
-        background: var(--gold);
-        color: var(--dark);
-        font-family: var(--font-cond);
-        font-size: 10px;
+        background: #ff6b35;
+        color: white;
+        font-size: 11px;
         font-weight: 700;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         text-transform: uppercase;
-        padding: 4px 10px;
+        padding: 6px 12px;
+        border-radius: 3px;
+        z-index: 2;
     }
 
-    /* ========== MOQ badge – white text on black ========== */
     .product-moq {
         position: absolute;
         top: 12px;
         right: 12px;
-        background: #000000 !important;
-        color: #ffffff !important;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
         border: 1px solid rgba(255, 255, 255, 0.3);
-        font-family: var(--font-cond);
         font-size: 10px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        padding: 4px 8px;
+        padding: 5px 10px;
+        border-radius: 3px;
+        z-index: 2;
     }
 
     .product-card-body {
         padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .product-name {
-        font-family: var(--font-cond);
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 700;
-        letter-spacing: 1px;
         text-transform: uppercase;
-        color: var(--white);
-        margin-bottom: 6px;
+        color: #1a1a1a;
+        margin-bottom: 10px;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        height: 44px;
     }
 
     .product-desc {
         font-size: 13px;
-        color: var(--muted);
+        color: #666;
         line-height: 1.5;
-        margin-bottom: 16px;
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex-grow: 1;
     }
 
     .product-specs {
         display: flex;
-        gap: 16px;
+        gap: 12px;
         flex-wrap: wrap;
-        margin-bottom: 16px;
+        margin-top: auto;
+        padding-top: 10px;
     }
 
     .product-spec {
         font-size: 11px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        color: var(--gold);
+        color: #ff6b35;
         display: flex;
         align-items: center;
         gap: 5px;
-    }
-
-    .product-spec i {
-        font-size: 9px;
+        font-weight: 600;
     }
 
     .product-card-footer {
-        border-top: 1px solid rgba(201, 168, 76, 0.1);
-        padding: 16px 20px;
+        border-top: 1px solid #eee;
+        padding: 15px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: #fafafa;
+    }
+
+    .product-footer-pricing-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        width: 100%;
     }
 
     .product-price-label {
-        font-size: 11px;
-        color: var(--muted);
+        font-size: 10px;
+        color: #888;
         letter-spacing: 1px;
-    }
-
-    .product-price {
-        font-family: var(--font-cond);
-        font-size: 14px;
-        color: var(--gold);
-        font-weight: 700;
-    }
-
-    .product-enquire {
-        background: none;
-        border: 1px solid rgba(201, 168, 76, 0.3);
-        color: var(--gold);
-        font-family: var(--font-cond);
-        font-size: 11px;
-        letter-spacing: 2px;
         text-transform: uppercase;
-        padding: 7px 14px;
-        cursor: pointer;
-        transition: all 0.2s;
+        font-weight: 600;
+    }
+
+    .product-retail-price {
+        font-size: 14px;
+        color: #555;
+        font-weight: 700;
+        text-decoration: line-through;
+        margin-top: 2px;
+    }
+
+    .product-retail-price.no-strike {
         text-decoration: none;
+        color: #1a1a1a;
+        font-size: 16px;
+    }
+
+    .product-bulk-price {
+        font-size: 18px;
+        color: #ff6b35;
+        font-weight: 900;
+        margin-top: 2px;
+    }
+
+    /* CHANGED: button instead of anchor */
+    .product-enquire {
+        background: #1a1a1a;
+        color: white;
+        border: none;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 11px 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.3s ease-out;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-weight: 600;
+        width: 100%;
     }
 
     .product-enquire:hover {
-        background: var(--gold);
-        color: var(--dark);
+        background: #ff6b35;
+        transform: translateY(-2px);
     }
 
-    /* ========== Pagination styling ========== */
+    /* ========== PAGINATION WRAPPER & FRAMEWORK RESET ========== */
     .pagination-wrapper {
-        margin-top: 48px;
+        margin-top: 60px;
         display: flex;
         justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
+        width: 100%;
     }
-    .pagination-btn {
-        background: var(--dark-3);
-        border: 1px solid rgba(201,168,76,0.15);
-        color: var(--muted);
-        font-family: var(--font-cond);
+
+    .pagination-wrapper nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .pagination-wrapper nav > div:first-child.flex {
+        display: none !important;
+    }
+
+    .pagination-wrapper nav > div:last-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+    }
+
+    @media (min-width: 768px) {
+        .pagination-wrapper nav {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .pagination-wrapper nav > div:last-child {
+            flex-direction: row;
+            width: auto;
+        }
+    }
+
+    .pagination-wrapper p,
+    .pagination-wrapper nav p {
         font-size: 13px;
-        font-weight: 600;
-        letter-spacing: 1px;
-        padding: 10px 18px;
-        cursor: pointer;
-        transition: all 0.2s;
+        color: #666666;
+        margin: 0;
+        font-weight: 500;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
-    .pagination-btn:hover {
-        background: var(--gold);
-        color: var(--dark);
+
+    .pagination-wrapper svg {
+        width: 14px !important;
+        height: 14px !important;
+        display: inline-block;
+        vertical-align: middle;
     }
-    .pagination-btn.active {
-        background: var(--gold);
-        color: var(--dark);
+
+    .pagination-wrapper nav span.relative.z-0 {
+        display: inline-flex;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid #dddddd;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+
+    .pagination-wrapper nav a,
+    .pagination-wrapper nav span[aria-current="page"],
+    .pagination-wrapper nav span[aria-disabled="true"] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 16px;
+        background: #ffffff;
+        color: #1a1a1a;
+        font-size: 13px;
         font-weight: 700;
-        border-color: var(--gold);
-    }
-    .pagination-btn:disabled {
-        opacity: 0.4;
-        pointer-events: none;
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-        .products-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        text-decoration: none;
+        border-right: 1px solid #dddddd;
+        border-top: none;
+        border-bottom: none;
+        border-left: none;
+        transition: all 0.2s ease-in-out;
     }
 
-    @media (max-width: 600px) {
-        .products-grid {
-            grid-template-columns: 1fr;
-        }
-        .search-container {
-            width: 100%;
-        }
+    .pagination-wrapper nav a:last-child,
+    .pagination-wrapper nav span:last-child {
+        border-right: none;
     }
 
-    /* Page specific enquiry section (dark theme) */
+    .pagination-wrapper nav a:hover {
+        background: #fafafa;
+        color: #ff6b35;
+    }
+
+    .pagination-wrapper nav span[aria-current="page"] {
+        background: #ff6b35;
+        color: #ffffff;
+    }
+
+    .pagination-wrapper nav span[aria-disabled="true"] {
+        background: #fdfdfd;
+        color: #cccccc;
+        cursor: not-allowed;
+    }
+
+    /* ========== HIGH-OCTANE CUSTOM QUOTE SECTION ========== */
     .page-enquiry {
-        background: var(--dark-2);
-        border-top: 1px solid rgba(201, 168, 76, 0.1);
-        margin-top: 60px;
-        padding: 60px 0;
+        background: linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 100%);
+        padding: 100px 20px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .enquiry-tech-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 107, 53, 0.015) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 107, 53, 0.015) 1px, transparent 1px);
+        background-size: 25px 25px;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .enquiry-kinetic-watermark {
+        position: absolute;
+        top: -20px;
+        left: -2%;
+        font-size: clamp(120px, 20vw, 280px);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -6px;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 107, 53, 0.025);
+        user-select: none;
+        pointer-events: none;
+        z-index: 1;
+        font-style: italic;
+    }
+
+    .enquiry-sport-slash {
+        position: absolute;
+        bottom: 0;
+        left: 20%;
+        width: 200px;
+        height: 100%;
+        background: linear-gradient(to top, rgba(255, 107, 53, 0.04), transparent);
+        transform: skewX(-20deg);
+        pointer-events: none;
+        z-index: 1;
     }
 
     .enquiry-card {
-        background: var(--dark-3);
-        border: 1px solid rgba(201, 168, 76, 0.15);
-        padding: 40px;
-        max-width: 700px;
+        background: rgba(20, 20, 20, 0.6);
+        border: 1px solid rgba(255, 107, 53, 0.15);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        padding: 60px 40px;
+        max-width: 850px;
         margin: 0 auto;
-        text-align: center;
+        border-radius: 12px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 3;
     }
 
-    .enquiry-card .section-title {
-        font-size: 32px;
-        margin-bottom: 12px;
-    }
-
-    .inline-form {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 28px;
-        justify-content: center;
-    }
-
-    .inline-form input,
-    .inline-form select {
-        background: var(--dark-4);
-        border: 1px solid rgba(201, 168, 76, 0.2);
-        padding: 12px 16px;
-        font-family: var(--font-body);
-        font-size: 14px;
-        color: var(--light);
-        min-width: 200px;
-        flex: 1;
-    }
-
-    .inline-form button {
-        background: var(--gold);
-        color: var(--dark);
-        border: none;
-        padding: 12px 28px;
-        font-family: var(--font-cond);
+    .enquiry-subtitle {
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #ff6b35;
         font-weight: 700;
+        margin-bottom: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .enquiry-card h2 {
+        font-size: clamp(28px, 5vw, 42px);
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        letter-spacing: -1px;
+        line-height: 1.15;
+    }
+
+    .enquiry-card h2 span {
+        color: #ff6b35;
+        text-shadow: 0 0 25px rgba(255, 107, 53, 0.2);
+    }
+
+    .enquiry-card p {
+        color: #b4b4b4;
+        margin-bottom: 40px;
+        font-size: 15px;
+        line-height: 1.6;
+        max-width: 650px;
+    }
+
+    .premium-enquiry-form {
+        text-align: left;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        position: relative;
+    }
+
+    .input-group.full-width {
+        grid-column: span 2;
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 14px 16px 14px 45px;
+        font-size: 14px;
+        color: white;
+        border-radius: 6px;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .input-group textarea {
+        padding-top: 14px;
+        resize: vertical;
+    }
+
+    .input-group select {
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 19px;
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+    .input-icon.textarea-icon {
+        top: 18px;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus,
+    .input-group textarea:focus {
+        background: rgba(255, 107, 53, 0.03);
+        border-color: rgba(255, 107, 53, 0.5);
+        outline: none;
+        box-shadow: 0 0 15px rgba(255, 107, 53, 0.1);
+    }
+
+    .input-group input:focus + .input-icon,
+    .input-group select:focus + .input-icon,
+    .input-group textarea:focus + .input-icon {
+        color: #ff6b35;
+    }
+
+    .enquiry-submit-btn {
+        background: #ff6b35;
+        color: white;
+        border: none;
+        padding: 16px 40px;
+        font-weight: 800;
         letter-spacing: 2px;
         text-transform: uppercase;
         cursor: pointer;
-        transition: 0.2s;
+        border-radius: 6px;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
     }
 
-    .inline-form button:hover {
-        background: var(--gold-light);
+    .enquiry-submit-btn:hover {
+        background: #ffffff;
+        color: #121212;
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(255, 255, 255, 0.15);
+    }
+
+    .enquiry-footer-meta {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        padding-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .enquiry-footer-meta span {
+        font-size: 11px;
+        color: #888;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .enquiry-footer-meta span i {
+        color: #ff6b35;
+    }
+
+    /* ========== RESPONSIVE SCALING BREAKPOINTS ========== */
+    @media (max-width: 1400px) {
+        .catalog-container { width: 95%; }
+    }
+
+    @media (max-width: 1200px) {
+        .products-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 992px) {
+        .products-page-hero { min-height: 460px; padding-top: 80px; }
+        .hero-badge-item { padding: 10px 14px; width: 100%; max-width: 280px; justify-content: center; }
+        .products-hero-title { font-size: 32px; }
+        .products-top-bar { gap: 15px; }
+        .products-filter { flex: 1; min-width: 100%; }
+        .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+
+        .enquiry-card { padding: 40px 20px; }
+        .form-grid { grid-template-columns: 1fr; gap: 15px; }
+        .input-group.full-width { grid-column: span 1; }
+        .enquiry-submit-btn { width: 100%; justify-content: center; }
+        .enquiry-footer-meta { gap: 15px; flex-direction: column; align-items: center; }
+    }
+
+    @media (max-width: 576px) {
+        .products-grid { grid-template-columns: 1fr; }
+        .products-section { padding: 60px 20px; }
+        .products-top-bar { flex-direction: column; gap: 20px; }
+        .products-title { width: 100%; }
     }
 </style>
 @endpush
 
 @section('content')
-    <section class="products-section" id="products-page">
-        <div class="container">
-            {{-- Page header / breadcrumb --}}
-            <div class="fade-up" style="margin-bottom: 20px;">
-                <div class="section-label">Our Catalogue</div>
-                <h1 class="section-title">COMPLETE <span>PRODUCT RANGE</span></h1>
-                <p class="gold" style="margin-top: 16px; max-width: 600px;">
-                    Explore our premium sports goods – from hand-stitched footballs to custom team kits. 
-                    All products are available for bulk orders, private label, and worldwide shipping.
-                </p>
+<section class="products-page-hero">
+    <div class="hero-tech-grid"></div>
+    <div class="hero-kinetic-watermark">KASBN PRO</div>
+    <div class="hero-sport-slash"></div>
+
+    <div class="products-hero-content">
+        <div class="products-hero-subtitle">
+            <span class="orange-accent-bar"></span> Engineered Performance
+        </div>
+        <h1 class="products-hero-title">
+            Elite Sportswear <br>
+            <span class="highlight-orange">Without Compromise</span>
+        </h1>
+        <p class="products-hero-description">
+            Explore our industrial-grade athletic collections. Built for maximum durability, custom team branding, and elite global distribution.
+        </p>
+
+        <div class="hero-feature-badges">
+            <div class="hero-badge-item">
+                <i class="fas fa-bolt"></i>
+                <span>Moisture-Wicking Tech</span>
             </div>
-
-            {{-- Filter + Search Bar --}}
-            <div class="products-header fade-up">
-                <div class="products-filter">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="leather">Leather</button>
-                    <button class="filter-btn" data-filter="textile">Textile</button>
-                    <button class="filter-btn" data-filter="boxing">Boxing / MMA</button>
-                    <button class="filter-btn" data-filter="oem">OEM / Custom</button>
-                </div>
-
-                <div class="search-container">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="productSearch" class="search-input" placeholder="Search by product name...">
-                </div>
+            <div class="hero-badge-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Reinforced Stitching</span>
             </div>
-
-            {{-- Products Grid (populated by JS) --}}
-            <div class="products-grid stagger-parent" id="productsGrid">
-                {{-- Products will be rendered by JavaScript --}}
-            </div>
-
-            {{-- Pagination Controls --}}
-            <div class="pagination-wrapper fade-up" id="paginationContainer">
-                {{-- Page buttons generated by JS --}}
+            <div class="hero-badge-item">
+                <i class="fas fa-globe"></i>
+                <span>Global Bulk Supply</span>
             </div>
         </div>
-    </section>
+    </div>
+    <div class="hero-bottom-fade"></div>
+</section>
 
-    {{-- Enquiry section --}}
-    <section class="page-enquiry" id="quick-enquiry">
-        <div class="container">
-            <div class="enquiry-card fade-up">
-                <div class="section-label" style="justify-content: center;">Request a Quote</div>
-                <h2 class="section-title">READY TO ORDER? <span>GET BULK PRICING</span></h2>
-                <p style="color: var(--muted); margin: 16px 0;">
-                    Tell us your product, quantity, and destination. We’ll reply within 24 hours with a custom quote.
-                </p>
-                <form method="POST" action="#" class="inline-form">
-                    @csrf
-                    <input type="text" name="name" placeholder="Your name *" required>
-                    <input type="email" name="email" placeholder="Email address *" required>
-                    <select name="product_interest">
-                        <option value="">I’m interested in...</option>
-                        <option>Footballs</option>
-                        <option>Boxing Gloves</option>
-                        <option>Sportswear / Jerseys</option>
-                        <option>Cricket Equipment</option>
-                        <option>OEM / Private Label</option>
-                    </select>
-                    <button type="submit">Send Enquiry →</button>
-                </form>
-                <p style="font-size: 12px; color: var(--muted); margin-top: 20px;">
-                    <i class="fas fa-lock"></i> Confidential & free – no obligation.
-                </p>
+<section class="products-section">
+    <div class="catalog-container">
+        <div class="products-top-bar">
+            <div class="products-title">Shop All</div>
+            <div class="products-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="footwear">Footwear</button>
+                <button class="filter-btn" data-filter="apparel">Apparel</button>
+                <button class="filter-btn" data-filter="equipment">Equipment</button>
+                <button class="filter-btn" data-filter="accessories">Accessories</button>
+            </div>
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="productSearch" class="search-input" placeholder="Search products...">
             </div>
         </div>
-    </section>
+
+        <div class="products-grid" id="productsGrid">
+            @forelse ($products as $product)
+                <div class="product-card" data-category="{{ strtolower($product->category?->name ?? 'uncategorized') }}">
+                    <a href="{{ route('product.show', $product->slug) }}" class="product-main-link">
+                        <div class="product-card-img">
+                            @if($product->images && $product->images->isNotEmpty())
+                                <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}">
+                            @else
+                                <i class="fas fa-box"></i>
+                            @endif
+
+                            <span class="product-tag">{{ $product->category?->name ?? 'Product' }}</span>
+
+                            @if($product->stock <= 0)
+                                <span class="product-moq" style="background-color: #dc2626;">Out of stock</span>
+                            @elseif($product->stock <= 5)
+                                <span class="product-moq" style="background-color: #d97706;">Low Stock</span>
+                            @else
+                                <span class="product-moq">In Stock</span>
+                            @endif
+                        </div>
+
+                        <div class="product-card-body">
+                            <div class="product-name">{{ $product->name }}</div>
+
+                            <div class="product-desc">
+                                {{ $product->description ?? 'Premium high-performance athletic apparel optimized for international team sports configuration and dynamic heavy training loads.' }}
+                            </div>
+
+                            <div class="product-specs">
+                                <span class="product-spec"><i class="fas fa-check"></i> Quality Assured</span>
+                                <span class="product-spec"><i class="fas fa-check"></i> Custom Available</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="product-card-footer">
+                        <div class="product-footer-pricing-row">
+                            <div>
+                                <div class="product-price-label">Retail Price</div>
+                                <div class="product-retail-price @if(!$product->bulk_price) no-strike @endif">
+                                    ${{ number_format($product->price, 2) }}
+                                </div>
+                            </div>
+
+                            @if($product->bulk_price)
+                                <div style="text-align: right;">
+                                    <div class="product-price-label" style="color: #ff6b35;">Bulk Pricing</div>
+                                    <div class="product-bulk-price">${{ number_format($product->bulk_price, 2) }}</div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <button
+                            type="button"
+                            class="product-enquire"
+                            data-product="{{ $product->name }}"
+                        >
+                            <i class="fas fa-envelope"></i> Enquire Now
+                        </button>
+                    </div>
+                </div>
+            @empty
+                <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-inbox" style="font-size: 48px; color: #ddd; margin-bottom: 20px;"></i>
+                    <p style="color: #999; font-size: 16px;">No products available at the moment.</p>
+                </div>
+            @endforelse
+        </div>
+
+        @if ($products->hasPages())
+            <div class="pagination-wrapper">
+                {{ $products->links() }}
+            </div>
+        @endif
+    </div>
+</section>
+
+<section class="page-enquiry" id="quick-enquiry">
+    <div class="enquiry-tech-grid"></div>
+    <div class="enquiry-kinetic-watermark">RFQ PRO</div>
+    <div class="enquiry-sport-slash"></div>
+
+    <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 3;">
+        <div class="enquiry-card">
+            <div class="enquiry-subtitle">
+                <span class="orange-accent-bar"></span> Direct Factory Channel
+            </div>
+            <h2>Get Your Custom Quote <br><span>Within 24 Hours</span></h2>
+            <p>Connect directly with our manufacturing division. Submit your design notes, material preferences, or breakdown volumes below for optimized corporate B2B pricing.</p>
+
+            <form method="POST" action="#" class="premium-enquiry-form">
+                @csrf
+                <div class="form-grid">
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" name="name" placeholder="Contact Name / Corporate Entity" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" name="email" placeholder="Business Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-cubes input-icon"></i>
+                        <select name="product_interest" id="product_interest" required>
+                            <option value="" disabled selected>Target Gear Segment...</option>
+                            <option>Footwear Lineup</option>
+                            <option>Apparel & Compression Kits</option>
+                            <option>Technical Equipment</option>
+                            <option>Team Accessories</option>
+                            <option>Custom Tailored Development</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-layer-group input-icon"></i>
+                        <input type="text" name="volume" placeholder="Estimated Volume (e.g., 250+ units)" required>
+                    </div>
+                </div>
+
+                <div class="input-group full-width">
+                    <i class="fas fa-sliders-h input-icon textarea-icon"></i>
+                    <textarea name="specifications" id="specifications" rows="4" placeholder="Detail your required features here (e.g., specific sizing arrays, custom embroidery placements, color swatches, or moisture-control fabric weight profiles)..."></textarea>
+                </div>
+
+                <button type="submit" class="enquiry-submit-btn">
+                    <span>Initialize RFQ</span> <i class="fas fa-bolt"></i>
+                </button>
+            </form>
+
+            <div class="enquiry-footer-meta">
+                <span><i class="fas fa-lock"></i> Encrypted Secure Data</span>
+                <span><i class="fas fa-shipping-fast"></i> Global Freight Logistics</span>
+                <span><i class="fas fa-shield-alt"></i> Premium Standard Audited</span>
+            </div>
+        </div>
+    </div>
+</section>
 @endsection
 
 @push('scripts')
 <script>
-    // ==================== PRODUCT DATA ====================
-  
-    const products = [
-        {icon:'fa-football-ball',tag:'Leather',filter:'leather',name:'Match Footballs',desc:'FIFA-standard hand-stitched leather footballs. Size 3,4,5. Full custom logo & design.',moq:'MOQ: 500 pcs',specs:['Hand Stitched','Full Custom','FIFA Standard'],price:'From $4.50/pc'},
-        {icon:'fa-boxing-glove',tag:'Boxing',filter:'boxing',name:'Boxing Gloves',desc:'Genuine leather & synthetic options. 8oz–18oz. Pro-grade padding, custom colors.',moq:'MOQ: 200 prs',specs:['Genuine Leather','Custom Design','OEM Branding'],price:'From $6.00/pr'},
-        {icon:'fa-tshirt',tag:'Textile',filter:'textile',name:'Sports Jerseys',desc:'Sublimation-printed polyester kits. Club, national & custom designs. Full team sets.',moq:'MOQ: 100 pcs',specs:['Sublimation Print','Quick Dry Fabric','Custom Sizes'],price:'From $3.20/pc'},
-        {icon:'fa-baseball-ball',tag:'Leather',filter:'leather',name:'Cricket Equipment',desc:'English willow & Kashmir willow bats, leather balls, pads, gloves. Tournament grade.',moq:'MOQ: 100 pcs',specs:['English Willow','Hand Crafted','Export Grade'],price:'From $8.00/pc'},
-        {icon:'fa-hockey-puck',tag:'Leather',filter:'leather',name:'Hockey Goods',desc:'FIH-grade field hockey sticks and balls. Composite, fibreglass, wood options.',moq:'MOQ: 150 pcs',specs:['FIH Grade','Composite Available','Club Branding'],price:'From $5.00/pc'},
-        {icon:'fa-paint-brush',tag:'OEM',filter:'oem',name:'Private Label / OEM',desc:'Your brand, our factory. Full product development, custom labels, hang tags, packaging.',moq:'MOQ: Varies',specs:['Private Label','Custom Packaging','Artwork Support'],price:'Get Custom Quote'},
-        {icon:'fa-futbol',tag:'Leather',filter:'leather',name:'Rugby Balls',desc:'Premium hand-stitched leather rugby balls. Match quality, custom print available.',moq:'MOQ: 300 pcs',specs:['Hand Stitched','Water Resistant','Club Logo'],price:'From $5.50/pc'},
-        {icon:'fa-hand-peace',tag:'Boxing',filter:'boxing',name:'MMA & Grappling Gloves',desc:'High-density foam, reinforced stitching. Ideal for training and competition.',moq:'MOQ: 100 prs',specs:['Vegan Leather','Breathable Mesh','Custom Colors'],price:'From $7.20/pr'},
-        {icon:'fa-bicycle',tag:'Textile',filter:'textile',name:'Cycling Kits',desc:'Aero-fit jersey & bib shorts. Moisture-wicking fabric, custom sublimation.',moq:'MOQ: 50 sets',specs:['UPF 50+','Pro Fit','Team Design'],price:'From $12.00/set'},
-    ];
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('productSearch');
+        const productCards = document.querySelectorAll('.product-card');
+        const specsTextarea = document.getElementById('specifications');
 
-    // ==================== PAGINATION SETUP ====================
-    const itemsPerPage = 6; // 2 rows of 3 columns
-    let currentPage = 1;
-    let filteredProducts = [...products];
+        function filterCatalog() {
+            const activeBtn = document.querySelector('.filter-btn.active');
+            const activeFilter = activeBtn ? activeBtn.getAttribute('data-filter').toLowerCase() : 'all';
+            const searchQuery = searchInput.value.toLowerCase().trim();
 
-    // DOM elements
-    const grid = document.getElementById('productsGrid');
-    const paginationContainer = document.getElementById('paginationContainer');
-    const searchInput = document.getElementById('productSearch');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    let activeFilter = 'all';
+            productCards.forEach(card => {
+                const productName = card.querySelector('.product-name')?.textContent.toLowerCase() || '';
+                const productCategory = (card.getAttribute('data-category') || '').toLowerCase();
 
-    // ==================== RENDER FUNCTIONS ====================
-    function renderProductCard(product) {
-        return `
-            <div class="product-card stagger" data-filter="${product.filter}">
-                <div class="product-card-img">
-                    <i class="fas ${product.icon}"></i>
-                    <span class="product-tag">${product.tag}</span>
-                    <span class="product-moq">${product.moq}</span>
-                </div>
-                <div class="product-card-body">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-desc">${product.desc}</div>
-                    <div class="product-specs">
-                        ${product.specs.map(spec => `<span class="product-spec"><i class="fas fa-check"></i> ${spec}</span>`).join('')}
-                    </div>
-                </div>
-                <div class="product-card-footer">
-                    <div>
-                        <div class="product-price-label">Bulk Price</div>
-                        <div class="product-price">${product.price}</div>
-                    </div>
-                    <a href="#quick-enquiry" class="product-enquire">Enquire Now</a>
-                </div>
-            </div>
-        `;
-    }
+                const matchesCategory = (activeFilter === 'all') || productCategory.includes(activeFilter);
+                const matchesSearch = productName.includes(searchQuery) || productCategory.includes(searchQuery);
 
-    function renderPage(page) {
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        const pageItems = filteredProducts.slice(start, end);
+                card.style.display = (matchesCategory && matchesSearch) ? 'flex' : 'none';
+            });
+        }
 
-        grid.innerHTML = pageItems.map(renderProductCard).join('');
-
-        // Re‑attach enquire link smooth scroll (since they are new elements)
-        document.querySelectorAll('.product-enquire').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector('#quick-enquiry');
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterCatalog();
             });
         });
 
-        renderPagination();
-    }
+        searchInput.addEventListener('input', filterCatalog);
 
-    function renderPagination() {
-        const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-        if (totalPages <= 1) {
-            paginationContainer.innerHTML = '';
-            return;
-        }
+        document.querySelectorAll('.product-enquire').forEach(button => {
+            button.addEventListener('click', function () {
+                const targetProductName = this.getAttribute('data-product');
 
-        let html = '';
-        // Previous button
-        html += `<button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} data-page="prev"><i class="fas fa-chevron-left"></i></button>`;
-
-        for (let i = 1; i <= totalPages; i++) {
-            html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
-        }
-
-        // Next button
-        html += `<button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} data-page="next"><i class="fas fa-chevron-right"></i></button>`;
-
-        paginationContainer.innerHTML = html;
-
-        // Add event listeners to page buttons
-        paginationContainer.querySelectorAll('.pagination-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const pageAttr = this.getAttribute('data-page');
-                if (pageAttr === 'prev') {
-                    if (currentPage > 1) currentPage--;
-                } else if (pageAttr === 'next') {
-                    const total = Math.ceil(filteredProducts.length / itemsPerPage);
-                    if (currentPage < total) currentPage++;
-                } else {
-                    currentPage = parseInt(pageAttr);
+                if (targetProductName && specsTextarea) {
+                    specsTextarea.value = `Hi, I am looking for a production run quotation on the following product: "${targetProductName}". Please provide packaging configurations, customization limits, and lead times.`;
                 }
-                renderPage(currentPage);
+
+                document.querySelector('#quick-enquiry').scrollIntoView({ behavior: 'smooth' });
             });
-        });
-    }
-
-    function filterProducts() {
-        const searchTerm = searchInput.value.toLowerCase();
-
-        filteredProducts = products.filter(product => {
-            const matchesSearch = product.name.toLowerCase().includes(searchTerm);
-            const matchesCategory = activeFilter === 'all' || product.filter === activeFilter;
-            return matchesSearch && matchesCategory;
-        });
-
-        currentPage = 1; // reset to first page after filter
-        renderPage(currentPage);
-    }
-
-    // ==================== EVENT LISTENERS ====================
-    // Filter buttons
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            activeFilter = this.dataset.filter;
-            filterProducts();
         });
     });
-
-    // Search input
-    searchInput.addEventListener('input', filterProducts);
-
-    // Initial render
-    renderPage(currentPage);
 </script>
 @endpush

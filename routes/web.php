@@ -12,12 +12,11 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\EnquiryController as AdminEnquiryController;
 use App\Http\Controllers\EnquiryController;
+use App\Http\Controllers\User\ProductController as UserProductController;
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');   
+Route::get('/', [UserProductController::class, 'showWelcome'])->name('home');   
 
 // user login
 
@@ -27,7 +26,9 @@ Route::view('/login', 'user.auth.login')->name('user.login');
 
 Route::view('/signup', 'user.auth.register')->name('user.signup');
 
-Route::view('/product', 'user.product_page')->name('products');
+Route::get('/product', [UserProductController::class, 'index'])->name('products');
+
+Route::get('/product/{slug}', [UserProductController::class, 'show'])->name('product.show');
 
 Route::view('/why-us', 'user.why-us')->name('why-us');
 

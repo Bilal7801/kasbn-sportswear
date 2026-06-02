@@ -6,7 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'category_id', 'price', 'stock', 'status'];
+    // Ensure 'keywords' is listed here!
+    protected $fillable = [
+        'name', 
+        'description', 
+        'keywords', // <-- CRITICAL LINE
+        'category_id', 
+        'price', 
+        'bulk_price', 
+        'stock', 
+        'status',
+        'slug'
+    ];
 
     public function category()
     {
@@ -16,11 +27,5 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
-    }
-
-    // Helper to get just the main image
-    public function primaryImage()
-    {
-        return $this->hasOne(ProductImage::class)->where('is_primary', true);
     }
 }

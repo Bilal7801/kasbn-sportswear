@@ -31,7 +31,6 @@ class ProductController extends Controller
             'total' => Product::count(),
             'active' => Product::where('status', 1)->count(),
             'low_stock' => Product::where('stock', '<=', 5)->count(),
-            // Fix: Use selectRaw and first() to get the sum safely
             'total_value' => Product::query()->selectRaw('SUM(price * stock) as total')->value('total') ?? 0,
         ];
 
@@ -48,13 +47,22 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'keywords' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048' // Validates each image in array
+            'price' => 'required|numeric|min:0',
+            'bulk_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $product = Product::create($request->except('images') + ['slug' => Str::slug($request->name)]);
+        // Clean, explicit data assembly instead of array union operator
+        $data = $request->except('images');
+        $data['slug'] = Str::slug($request->name);
+        $data['status'] = $request->has('status') ? 1 : 0;
+        $data['keywords'] = $request->input('keywords'); // Forced explicit mapping
+
+        $product = Product::create($data);
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
@@ -62,7 +70,7 @@ class ProductController extends Controller
 
                 $product->images()->create([
                     'image_path' => $path,
-                    'is_primary' => $index === 0, // First image is the main one
+                    'is_primary' => $index === 0,
                     'sort_order' => $index
                 ]);
             }
@@ -74,7 +82,6 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
-        // Load images to ensure they are available in the view
         $product->load('images');
         return view('admin.product_edit', compact('product', 'categories'));
     }
@@ -83,21 +90,25 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'keywords' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'price' => 'required|numeric|min:0',
+            'bulk_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        // Update basic details
-        $product->update($request->except('images') + [
-            'slug' => \Illuminate\Support\Str::slug($request->name),
-            'status' => $request->has('status') ? 1 : 0,
-        ]);
+        // Clean, explicit data assembly to prevent missing keys on updates
+        $data = $request->except('images');
+        $data['slug'] = Str::slug($request->name);
+        $data['status'] = $request->has('status') ? 1 : 0;
+        $data['keywords'] = $request->input('keywords'); // Forced explicit mapping
+
+        $product->update($data);
 
         // Handle new image uploads
         if ($request->hasFile('images')) {
-            // Get the current highest sort order to append new images at the end
             $lastOrder = $product->images()->max('sort_order') ?? -1;
 
             foreach ($request->file('images') as $index => $image) {
@@ -105,7 +116,7 @@ class ProductController extends Controller
 
                 $product->images()->create([
                     'image_path' => $path,
-                    'is_primary' => ($lastOrder === -1 && $index === 0), // Primary only if no images existed
+                    'is_primary' => ($lastOrder === -1 && $index === 0),
                     'sort_order' => $lastOrder + $index + 1
                 ]);
             }
@@ -116,16 +127,12 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // 1. Delete all physical image files from storage
         foreach ($product->images as $image) {
             if (Storage::disk('public')->exists($image->image_path)) {
                 Storage::disk('public')->delete($image->image_path);
             }
         }
 
-        // 2. Delete the product record 
-        // (Note: If you set up 'onDelete(cascade)' in your migration, 
-        // the ProductImage rows in the DB will disappear automatically)
         $product->delete();
 
         return redirect()->route('admin.product.index')

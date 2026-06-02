@@ -1,13 +1,17 @@
 @php
-$admin = Auth::guard('admin')->user();
+    $admin = Auth::guard('admin')->user();
 @endphp
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="googlebot" content="noindex, nofollow">
+
     <title>@yield('page-title', 'SportFit Admin')</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,6 +35,7 @@ $admin = Auth::guard('admin')->user();
             }
         }
     </script>
+    @stack('styles')
 </head>
 
 <body class="bg-gray-50 text-gray-800 min-h-screen">
@@ -52,10 +57,10 @@ $admin = Auth::guard('admin')->user();
                     <i class="fas fa-users mr-3"></i> Customers
                 </a>
 
-                <div x-data="{ open: {{ (request()->is('admin/category*') || request()->is('admin/product*')) ? 'true' : 'fxalse' }} }" class="relative">
+                <div x-data="{ open: {{ (request()->is('admin/category*') || request()->is('admin/product*')) ? 'true' : 'false' }} }" class="relative">
                     <button @click="open = !open"
                         class="w-full flex items-center px-4 py-3 rounded-lg transition-colors focus:outline-none 
-            {{ (request()->is('admin/category*') || request()->is('admin/product*')) ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
+                        {{ (request()->is('admin/category*') || request()->is('admin/product*')) ? 'bg-primary text-white' : 'hover:bg-gray-100' }}">
 
                         <i class="fas fa-tshirt mr-3 {{ (request()->is('admin/category*') || request()->is('admin/product*')) ? 'text-white' : '' }}"></i>
                         <span>Sportswear</span>
@@ -63,13 +68,13 @@ $admin = Auth::guard('admin')->user();
                             class="fas ml-auto text-xs {{ (request()->is('admin/category*') || request()->is('admin/product*')) ? 'text-white' : '' }}"></i>
                     </button>
 
-                    <div x-show="open" x-transition class="mt-1 ml-4 border-l-2 border-gray-200 pl-2 space-y-1">
+                    <div x-show="open" x-transition class="mt-1 ml-4 border-l-2 border-gray-200 pl-2 space-y-1" style="display: none;">
                         <a href="{{ route('admin.category.index') }}"
-                            class="flex items-center px-4 py-2 rounded-lg text-sm {{ request()->routeIs('admin.category') ? 'text-primary font-bold' : 'text-gray-600 hover:bg-gray-100' }}">
+                            class="flex items-center px-4 py-2 rounded-lg text-sm {{ request()->is('admin/category*') ? 'text-primary font-bold' : 'text-gray-600 hover:bg-gray-100' }}">
                             Category
                         </a>
                         <a href="{{ route('admin.product.index') }}"
-                            class="flex items-center px-4 py-2 rounded-lg text-sm {{ request()->routeIs('admin.product') ? 'text-primary font-bold' : 'text-gray-600 hover:bg-gray-100' }}">
+                            class="flex items-center px-4 py-2 rounded-lg text-sm {{ request()->is('admin/product*') ? 'text-primary font-bold' : 'text-gray-600 hover:bg-gray-100' }}">
                             Product
                         </a>
                     </div>
@@ -125,18 +130,18 @@ $admin = Auth::guard('admin')->user();
                         </span>
                         @endif
                     </button>
+                    
                     <a href="{{ route('admin.settings') }}" class="flex items-center border-l pl-4 border-gray-200 hover:opacity-80 transition-all group">
                         <img
-                            src="{{ $admin && $admin->profile_image
-        ? asset('uploads/admin/'.$admin->profile_image)
-        : 'https://ui-avatars.com/api/?name='.urlencode($admin->name ?? 'Admin').'&background=3b82f6&color=fff' }}"
+                            src="{{ ($admin && $admin->profile_image)
+                                ? asset('uploads/admin/'.$admin->profile_image)
+                                : 'https://ui-avatars.com/api/?name='.urlencode($admin?->name ?? 'Admin').'&background=3b82f6&color=fff' }}"
                             class="w-9 h-9 rounded-full mr-2 ring-2 ring-transparent group-hover:ring-primary/20 transition-all"
                             alt="Admin Avatar">
                         <div class="flex flex-col">
                             <span class="text-sm font-bold leading-tight group-hover:text-primary transition-colors">
-                                {{ $admin->name ?? 'Admin' }}
+                                {{ $admin?->name ?? 'Admin' }}
                             </span>
-
                             <span class="text-xs text-gray-500">SportFit Manager</span>
                         </div>
                         <i class="fas fa-cog ml-3 text-gray-300 group-hover:text-primary text-xs transition-colors"></i>
@@ -149,7 +154,7 @@ $admin = Auth::guard('admin')->user();
             </main>
 
             <footer class="bg-white border-t border-gray-200 p-4 text-center text-sm text-gray-600">
-                © {{ date('Y') }} SportFit Admin Dashboard. All rights reserved.
+                &copy; {{ date('Y') }} SportFit Admin Dashboard. All rights reserved.
             </footer>
         </div>
     </div>

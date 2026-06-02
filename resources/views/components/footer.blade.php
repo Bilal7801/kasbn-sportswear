@@ -64,7 +64,7 @@
   padding-top: 60px;
   font-family: 'Barlow', sans-serif;
   color: #F0EDE6;
-  margin-top: 50px;
+  margin-top: 0; /* FIXED: Changed from 50px to 0 to flush against the newsletter */
 }
 
 .footer-self-grid {

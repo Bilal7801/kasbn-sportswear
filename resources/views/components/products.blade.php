@@ -242,72 +242,6 @@
     </style>
 @endpush
 
-@php
-    $products = [
-        [
-            'icon' => 'fa-football-ball',
-            'tag' => 'Leather',
-            'filter' => 'leather',
-            'name' => 'Match Footballs',
-            'desc' =>
-                'FIFA-standard hand-stitched leather footballs. Available in size 3, 4, 5. Full custom logo & design.',
-            'moq' => 'MOQ: 500 pcs',
-            'specs' => ['Hand Stitched', 'Full Custom', 'FIFA Standard'],
-            'price' => 'From $4.50/pc',
-        ],
-        [
-            'icon' => 'fa-boxing-glove',
-            'tag' => 'Boxing',
-            'filter' => 'boxing',
-            'name' => 'Boxing Gloves',
-            'desc' => 'Genuine leather and synthetic options. 8oz–18oz. Pro-grade padding with custom colour ways.',
-            'moq' => 'MOQ: 200 prs',
-            'specs' => ['Genuine Leather', 'Custom Design', 'OEM Branding'],
-            'price' => 'From $6.00/pr',
-        ],
-        [
-            'icon' => 'fa-tshirt',
-            'tag' => 'Textile',
-            'filter' => 'textile',
-            'name' => 'Sports Jerseys',
-            'desc' => 'Sublimation-printed polyester kits. Club, national & custom designs. Full team sets available.',
-            'moq' => 'MOQ: 100 pcs',
-            'specs' => ['Sublimation Print', 'Quick Dry Fabric', 'Custom Sizes'],
-            'price' => 'From $3.20/pc',
-        ],
-        [
-            'icon' => 'fa-baseball-ball',
-            'tag' => 'Leather',
-            'filter' => 'leather',
-            'name' => 'Cricket Equipment',
-            'desc' => 'English willow & Kashmir willow bats, leather balls, pads and gloves. Tournament grade.',
-            'moq' => 'MOQ: 100 pcs',
-            'specs' => ['English Willow', 'Hand Crafted', 'Export Grade'],
-            'price' => 'From $8.00/pc',
-        ],
-        [
-            'icon' => 'fa-hockey-puck',
-            'tag' => 'Leather',
-            'filter' => 'leather',
-            'name' => 'Hockey Goods',
-            'desc' => 'FIH-grade field hockey sticks and balls. Composite, fibreglass and wood options available.',
-            'moq' => 'MOQ: 150 pcs',
-            'specs' => ['FIH Grade', 'Composite Available', 'Club Branding'],
-            'price' => 'From $5.00/pc',
-        ],
-        [
-            'icon' => 'fa-paint-brush',
-            'tag' => 'OEM',
-            'filter' => 'oem',
-            'name' => 'Private Label / OEM',
-            'desc' => 'Your brand, our factory. Full product development, custom labels, hang tags, and packaging.',
-            'moq' => 'MOQ: Varies',
-            'specs' => ['Private Label', 'Custom Packaging', 'Artwork Support'],
-            'price' => 'Get Custom Quote',
-        ],
-    ];
-@endphp
-
 <section class="products-section">
     <div class="container">
         <div class="products-header fade-up">
@@ -325,31 +259,40 @@
         </div>
 
         <div class="products-grid stagger-parent">
-            @foreach ($products as $p)
-                <div class="product-card stagger" data-filter="{{ $p['filter'] }}">
+            @forelse ($products ?? [] as $product)
+                <div class="product-card stagger" data-filter="leather">
                     <div class="product-card-img">
-                        <i class="fas {{ $p['icon'] }}"></i>
-                        <span class="product-tag">{{ $p['tag'] }}</span>
-                        <span class="product-moq">{{ $p['moq'] }}</span>
+                        @if($product->primaryImage()->first())
+                            <img src="{{ asset('storage/' . $product->primaryImage()->first()->image_path) }}" 
+                                 alt="{{ $product->name }}"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        @else
+                            <i class="fas fa-box"></i>
+                        @endif
+                        <span class="product-tag">{{ $product->category?->name ?? 'Product' }}</span>
+                        <span class="product-moq">MOQ: Varies</span>
                     </div>
                     <div class="product-card-body">
-                        <div class="product-name">{{ $p['name'] }}</div>
-                        <div class="product-desc">{{ $p['desc'] }}</div>
+                        <div class="product-name">{{ $product->name }}</div>
+                        <div class="product-desc">Premium quality product from our extensive catalogue. Available for bulk orders.</div>
                         <div class="product-specs">
-                            @foreach ($p['specs'] as $spec)
-                                <span class="product-spec"><i class="fas fa-check"></i> {{ $spec }}</span>
-                            @endforeach
+                            <span class="product-spec"><i class="fas fa-check"></i> Quality Assured</span>
+                            <span class="product-spec"><i class="fas fa-check"></i> Custom Options</span>
                         </div>
                     </div>
                     <div class="product-card-footer">
                         <div>
                             <div class="product-price-label">Bulk Price</div>
-                            <div class="product-price">{{ $p['price'] }}</div>
+                            <div class="product-price">From ${{ number_format($product->price, 2) }}/pc</div>
                         </div>
                         <a href="#enquiry" class="product-enquire">Enquire Now</a>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div class="stagger" style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                    <p style="color: #999;">No products available at the moment.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 </section>
