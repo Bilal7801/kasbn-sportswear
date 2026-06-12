@@ -14,7 +14,7 @@ class AuthController extends Controller
     /**
      * Display the login view.
      */
-    public function showLogin()
+    public function showLogin(Request $request)
     {
         return view('user.auth.login');
     }
@@ -34,7 +34,13 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            // FIX: Redirects to the main landing page ('home') if no intended page was stored
+            $redirectTo = $request->input('redirect_to');
+
+            if (!empty($redirectTo)) {
+                return redirect()->to($redirectTo)
+                    ->with('success', 'Welcome back, ' . Auth::user()->name . '!');
+            }
+
             return redirect()->intended(route('home'))
                 ->with('success', 'Welcome back, ' . Auth::user()->name . '!');
         }
@@ -59,7 +65,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
@@ -71,7 +77,6 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        // FIX: Redirects directly to the main landing page ('home') after signing up
         return redirect()->route('home')
             ->with('success', 'Account created successfully! Welcome to KASBN.');
     }

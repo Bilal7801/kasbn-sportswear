@@ -36,7 +36,17 @@ Route::view('/why-us', 'user.why-us')->name('why-us');
 Route::view('/process', 'user.process')->name('process');
 Route::view('/certifications', 'user.certifications')->name('certifications');
 
-Route::get('/enquiry', function () { return view('user.enquiry'); })->name('enquiry.form');
+
+Route::get('/enquiry', function (Request $request) {
+    return view('user.enquiry', [
+        'product_name' => $request->product_name,
+        'product_slug' => $request->product_slug,
+        'product_image' => $request->product_image,
+        'product_price' => $request->product_price,
+        'product_category' => $request->product_category,
+    ]);
+})->name('enquiry.form');
+
 Route::post('/enquiry', [EnquiryController::class, 'store'])->name('enquiry.store');
 
 Route::get('/contact', function () { return view('user.contact'); })->name('contact');
