@@ -239,9 +239,31 @@ button.nav-login:hover {
         display: flex;
     }
 }
+
+/* ── HOMEPAGE ONLY: WHITE TEXT BEFORE SCROLL ── */
+.navbar.navbar-home:not(.scrolled) .nav-logo-text,
+.navbar.navbar-home:not(.scrolled) .nav-logo-sub,
+.navbar.navbar-home:not(.scrolled) .nav-links a,
+.navbar.navbar-home:not(.scrolled) .nav-login,
+.navbar.navbar-home:not(.scrolled) button.nav-login {
+    color: #ffffff;
+}
+.navbar.navbar-home:not(.scrolled) .nav-links a::after {
+    background: #ffffff;
+}
+.navbar.navbar-home:not(.scrolled) .nav-hamburger span {
+    background: #ffffff;
+}
+/* Ensure links turn to a nice clean semi-transparent white on hover over the banner */
+.navbar.navbar-home:not(.scrolled) .nav-links a:hover,
+.navbar.navbar-home:not(.scrolled) .nav-login:hover,
+.navbar.navbar-home:not(.scrolled) button.nav-login:hover {
+    color: rgba(255, 255, 255, 0.75);
+}
 </style>
 
-<nav class="navbar" id="navbar">
+{{-- Added dynamic class to identify if it's the root homepage --}}
+<nav class="navbar {{ request()->is('/') ? 'navbar-home' : '' }}" id="navbar">
     <div class="nav-inner">
         <a href="{{ route('home') }}" class="nav-logo">
             <div class="nav-logo-icon"><i class="fas fa-trophy"></i></div>
@@ -261,9 +283,6 @@ button.nav-login:hover {
 
         <div class="nav-right">
             @auth
-                <a href="{{ route('admin.enquiries.index') }}" class="nav-login">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
                 <form method="POST" action="{{ route('logout') }}" style="display:inline">
                     @csrf
                     <button type="submit" class="nav-login">
@@ -271,7 +290,7 @@ button.nav-login:hover {
                     </button>
                 </form>
             @else
-                <a href="{{ route('user.login') }}" class="nav-login">
+                <a href="{{ route('login') }}" class="nav-login">
                     <i class="fas fa-user-circle"></i> Login
                 </a>
             @endauth
@@ -294,9 +313,16 @@ button.nav-login:hover {
         <li><a href="#enquiry" onclick="closeMobile()">Get Quote</a></li>
         <div class="mobile-menu-divider"></div>
         @auth
-            <li><a href="{{ route('admin.enquiries.index') }}" onclick="closeMobile()"><i class="fas fa-th-large" style="margin-right:8px"></i>Dashboard</a></li>
+            <li>
+                <form method="POST" action="{{ route('logout') }}" id="mobile-logout" style="display:none;">
+                    @csrf
+                </form>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('mobile-logout').submit(); closeMobile();">
+                    <i class="fas fa-sign-out-alt" style="margin-right:8px"></i>Logout
+                </a>
+            </li>
         @else
-            <li><a href="{{ route('user.login') }}" onclick="closeMobile()"><i class="fas fa-user-circle" style="margin-right:8px"></i>Login</a></li>
+            <li><a href="{{ route('login') }}" onclick="closeMobile()"><i class="fas fa-user-circle" style="margin-right:8px"></i>Login</a></li>
         @endauth
     </ul>
 </div>
